@@ -12,6 +12,13 @@ locals {
   }
 }
 
+resource "random_id" "storage" {
+  keepers = {
+    storage_id = local.name
+  }
+  byte_length = 4
+}
+
 resource "azurerm_resource_group" "rg" {
   name = local.name
   location = local.location
@@ -84,5 +91,15 @@ module "spark_node_pool" {
   node_count = 3
   vnet_subnet_id = module.aks_subnet.id
   
+  tags = local.tags
+}
+
+resource "azurerm_container_registry" "acr" {
+  name                     = local.name
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = local.location
+  sku                      = "Premium"
+  admin_enabled            = false
+
   tags = local.tags
 }
