@@ -1,9 +1,15 @@
 ---
 page_type: sample
 languages:
+<<<<<<< HEAD
   - csharp
 products:
   - dotnet
+=======
+  - Terraform
+products:
+  - Terraform, Spark
+>>>>>>> ce50ba5... wip spark docker file
 description: "Add 150 character max description"
 urlFragment: "update-this-to-unique-url-stub"
 ---
@@ -24,7 +30,10 @@ This project tests Azure Spark performance on AKS. The goal is to optimize
 
 | File/folder       | Description                                |
 | ----------------- | ------------------------------------------ |
+<<<<<<< HEAD
 | `env`             | Terraform to build environment             |
+=======
+>>>>>>> ce50ba5... wip spark docker file
 | `src`             | Sample source code.                        |
 | `.gitignore`      | Define what to ignore at commit time.      |
 | `CHANGELOG.md`    | List of changes to the sample.             |

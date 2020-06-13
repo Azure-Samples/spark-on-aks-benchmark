@@ -1,0 +1,22 @@
+name: Spark Docker Image
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'spark/**'
+jobs:
+  build:
+    name: "Docker Build"
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: build
+        uses: docker/build-push-action@1
