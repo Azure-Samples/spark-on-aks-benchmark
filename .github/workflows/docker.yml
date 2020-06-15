@@ -20,3 +20,6 @@ jobs:
 
       - name: build
         uses: docker/build-push-action@1
+        with:
+          repository: ${{ secrets.ACR }}
+          tag: latest
