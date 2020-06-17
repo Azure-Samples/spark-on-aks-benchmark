@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 provider azurerm {
   features{}
 }
@@ -44,6 +47,8 @@ module "aks_subnet" {
   resource_group_name = azurerm_resource_group.rg.name
   virtual_network_name = module.vnet.name
   address_prefixes = ["10.10.1.0/24"]
+
+  service_endpoints = ["Microsoft.ContainerRegistry"]
 }
 
 module "log_analytics" {
@@ -101,5 +106,24 @@ resource "azurerm_container_registry" "acr" {
   sku                      = "Premium"
   admin_enabled            = false
 
+  network_rule_set {
+    virtual_network {
+      action = "Allow"
+      subnet_id = module.aks_subnet.id
+    }
+  }
+
+  tags = local.tags
+}
+
+module "adls_gen2" {
+  source = "../modules/storage-account"
+
+  name = "${lower(local.name)}${random_id.storage.hex}"
+  location = local.location
+  resource_group_name = azurerm_resource_group.rg.name
+  account_tier = "Premium"
+  account_replication_type = "LRS"
+  hns_enabled = "true"
   tags = local.tags
 }

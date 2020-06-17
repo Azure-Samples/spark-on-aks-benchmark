@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 variable "name" {
   type = string
 }
@@ -9,4 +12,8 @@ variable "virtual_network_name" {
 }
 variable "address_prefixes" {
   type = list(string)
+}
+variable "service_endpoints" {
+  type = list(string)
+  default = []
 }

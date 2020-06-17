@@ -1,15 +1,9 @@
 ---
 page_type: sample
 languages:
-<<<<<<< HEAD
-  - csharp
-products:
-  - dotnet
-=======
-  - Terraform
+  - Terraform, Bash
 products:
   - Terraform, Spark
->>>>>>> ce50ba5... wip spark docker file
 description: "Add 150 character max description"
 urlFragment: "update-this-to-unique-url-stub"
 ---
@@ -28,18 +22,21 @@ This project tests Azure Spark performance on AKS. The goal is to optimize
 
 ## Contents
 
-| File/folder       | Description                                |
-| ----------------- | ------------------------------------------ |
+| File/folder | Description |
+| ----------- | ----------- |
+
+
 <<<<<<< HEAD
-| `env`             | Terraform to build environment             |
+| `env` | Terraform to build environment |
 =======
->>>>>>> ce50ba5... wip spark docker file
-| `src`             | Sample source code.                        |
-| `.gitignore`      | Define what to ignore at commit time.      |
-| `CHANGELOG.md`    | List of changes to the sample.             |
-| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
-| `LICENSE`         | The license for the sample.                |
+
+> > > > > > > ce50ba5... wip spark docker file
+> > > > > > > | `src` | Sample source code. |
+> > > > > > > | `.gitignore` | Define what to ignore at commit time. |
+> > > > > > > | `CHANGELOG.md` | List of changes to the sample. |
+> > > > > > > | `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
+> > > > > > > | `README.md` | This README file. |
+> > > > > > > | `LICENSE` | The license for the sample. |
 
 ## Prerequisites
 
