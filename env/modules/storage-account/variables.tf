@@ -21,7 +21,7 @@ variable "account_kind" {
   default = "StorageV2"
 }
 variable "hns_enabled" {
-  type = string
-  default = "false"
+  type = bool
+  default = false
 }
 variable "tags" {}

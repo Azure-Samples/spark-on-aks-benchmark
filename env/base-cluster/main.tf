@@ -122,8 +122,8 @@ module "adls_gen2" {
   name = "${lower(local.name)}${random_id.storage.hex}"
   location = local.location
   resource_group_name = azurerm_resource_group.rg.name
-  account_tier = "Premium"
+  account_tier = "Standard"
   account_replication_type = "LRS"
-  hns_enabled = "true"
+  hns_enabled = true
   tags = local.tags
 }

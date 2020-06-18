@@ -22,21 +22,15 @@ This project tests Azure Spark performance on AKS. The goal is to optimize
 
 ## Contents
 
-| File/folder | Description |
-| ----------- | ----------- |
-
-
-<<<<<<< HEAD
-| `env` | Terraform to build environment |
-=======
-
-> > > > > > > ce50ba5... wip spark docker file
-> > > > > > > | `src` | Sample source code. |
-> > > > > > > | `.gitignore` | Define what to ignore at commit time. |
-> > > > > > > | `CHANGELOG.md` | List of changes to the sample. |
-> > > > > > > | `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-> > > > > > > | `README.md` | This README file. |
-> > > > > > > | `LICENSE` | The license for the sample. |
+| File/folder       | Description                                |
+| ----------------- | ------------------------------------------ |
+| `env`             | Terraform to build environment             |
+| `src`             | Sample source code.                        |
+| `.gitignore`      | Define what to ignore at commit time.      |
+| `CHANGELOG.md`    | List of changes to the sample.             |
+| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
+| `README.md`       | This README file.                          |
+| `LICENSE`         | The license for the sample.                |
 
 ## Prerequisites
 
