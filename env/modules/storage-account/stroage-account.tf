@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license
 
 resource "azurerm_storage_account" "stroage" {
   name = var.name

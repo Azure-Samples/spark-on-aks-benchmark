@@ -1,8 +1,17 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license
 
-provider azurerm {
-  features{}
+terraform {
+  backend "azurerm" {}
+}
+
+# Azure RM Provider
+provider "azurerm" {
+  subscription_id = var.sub
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
+  features {}
 }
 
 locals {

@@ -1,13 +1,13 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
 
-name: Spark Docker Image
+name: "Spark Docker Image"
 on:
   push:
     branches:
       - master
     paths:
-      - 'spark/**'
+      - '../../spark/**'
 jobs:
   build:
     name: "Docker Build"
