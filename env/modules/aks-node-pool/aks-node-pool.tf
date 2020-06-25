@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license
+
 resource "azurerm_kubernetes_cluster_node_pool" "pool" {
   name = "${var.name}pool"
   kubernetes_cluster_id = var.aks_cluster_id

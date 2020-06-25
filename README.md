@@ -1,9 +1,11 @@
 ---
 page_type: sample
 languages:
-  - csharp
+
+  - Terraform, Bash
 products:
-  - dotnet
+  - Terraform, Spark
+
 description: "Add 150 character max description"
 urlFragment: "update-this-to-unique-url-stub"
 ---

@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license
+
 resource "azurerm_kubernetes_cluster" "aks" {
   name = "${var.name}-k8s"
   location = var.location

@@ -1,0 +1,54 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
+name: "Terraform"
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '../../env/**'
+  pull_request:
+    branches:
+      - master
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    # Checkout the repository to the GitHub Actions runner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Install the latest version of Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        # with:
+        #   terraform_version: 0.12.26
+
+      - name: Check Terraform version
+        run: terraform version
+
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: terraform init -backend-config="resource_group_name=${{ secrets.TF_STORAGE_RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ secrets.TF_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.TF_STORAGE_CONTAINER_NAME }}" -backend-config="key=${{ secrets.TF_STORAGE_KEY }}" -backend-config="access_key=${{ secrets.TF_STORAGE_ACCESS_KEY }}"
+        working-directory: ./env/base-cluster
+
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: terraform plan -var="sub=${{ secrets.SUB }}" -var="client_id=${{ secrets.CLIENT_ID }}" -var="client_secret=${{ secrets.CLIENT_SECRET }}" -var="tenant_id=${{ secrets.TENANT_ID }}"
+        working-directory: ./env/base-cluster
+
+        # On push to master, build or change infrastructure according to Terraform configuration files
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+        run: terraform apply -auto-approve -var="sub=${{ secrets.SUB }}" -var="client_id=${{ secrets.CLIENT_ID }}" -var="client_secret=${{ secrets.CLIENT_SECRET }}" -var="tenant_id=${{ secrets.TENANT_ID }}"
+        working-directory: ./env/base-cluster

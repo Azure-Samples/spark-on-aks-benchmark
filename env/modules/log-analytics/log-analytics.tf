@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license
+
 resource "azurerm_log_analytics_workspace" "la" {
   name = "${var.name}-la"
   location = var.location
