@@ -1,9 +1,11 @@
 ---
 page_type: sample
 languages:
+
   - Terraform, Bash
 products:
   - Terraform, Spark
+
 description: "Add 150 character max description"
 urlFragment: "update-this-to-unique-url-stub"
 ---

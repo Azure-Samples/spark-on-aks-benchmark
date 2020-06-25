@@ -1,3 +1,4 @@
+
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license
 
@@ -12,6 +13,7 @@ provider "azurerm" {
   client_secret   = var.client_secret
   tenant_id       = var.tenant_id
   features {}
+
 }
 
 locals {
@@ -58,6 +60,7 @@ module "aks_subnet" {
   address_prefixes = ["10.10.1.0/24"]
 
   service_endpoints = ["Microsoft.ContainerRegistry"]
+
 }
 
 module "log_analytics" {
@@ -134,5 +137,6 @@ module "adls_gen2" {
   account_tier = "Standard"
   account_replication_type = "LRS"
   hns_enabled = true
+
   tags = local.tags
 }

@@ -24,4 +24,5 @@ variable "hns_enabled" {
   type = bool
   default = false
 }
+
 variable "tags" {}
