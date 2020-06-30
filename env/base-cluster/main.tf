@@ -106,7 +106,7 @@ module "spark_node_pool" {
   name           = "spark"
   aks_cluster_id = module.aks.id
   vm_size        = "Standard_D4s_v3"
-  node_count     = var.spark_aks_pool_size
+  node_count     = local.spark_aks_pool_size
   vnet_subnet_id = module.aks_subnet.id
 
   tags = local.tags
