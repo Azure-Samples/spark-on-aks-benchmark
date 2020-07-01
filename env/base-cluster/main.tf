@@ -17,11 +17,12 @@ provider "azurerm" {
 }
 
 locals {
-  name = "sparkOnAks"
-  location = "westus2"
-  vnet_address_space = ["10.10.0.0/16"]
+  name                = "sparkOnAks"
+  location            = "westus2"
+  vnet_address_space  = ["10.10.0.0/16"]
+  spark_aks_pool_size = 30
   tags = {
-    owner = terraform.workspace
+    owner    = terraform.workspace
     use_case = "testing"
   }
 }
@@ -34,7 +35,7 @@ resource "random_id" "storage" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name = local.name
+  name     = local.name
   location = local.location
 
   tags = local.tags
@@ -43,10 +44,10 @@ resource "azurerm_resource_group" "rg" {
 module "vnet" {
   source = "../modules/vnet"
 
-  name = local.name
-  location = local.location
+  name                = local.name
+  location            = local.location
   resource_group_name = azurerm_resource_group.rg.name
-  address_space = local.vnet_address_space
+  address_space       = local.vnet_address_space
 
   tags = local.tags
 }
@@ -54,10 +55,10 @@ module "vnet" {
 module "aks_subnet" {
   source = "../modules/subnet"
 
-  name = "aks_subnet"
-  resource_group_name = azurerm_resource_group.rg.name
+  name                 = "aks_subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = module.vnet.name
-  address_prefixes = ["10.10.1.0/24"]
+  address_prefixes     = ["10.10.1.0/24"]
 
   service_endpoints = ["Microsoft.ContainerRegistry"]
 
@@ -66,35 +67,35 @@ module "aks_subnet" {
 module "log_analytics" {
   source = "../modules/log-analytics"
 
-  name = local.name
-  location = local.location
+  name                = local.name
+  location            = local.location
   resource_group_name = azurerm_resource_group.rg.name
-  
+
   tags = local.tags
 }
 
 resource "azurerm_log_analytics_solution" "container_insights" {
-  solution_name = "ContainerInsights"
-  location = local.location
-  resource_group_name = azurerm_resource_group.rg.name
+  solution_name         = "ContainerInsights"
+  location              = local.location
+  resource_group_name   = azurerm_resource_group.rg.name
   workspace_resource_id = module.log_analytics.id
-  workspace_name = module.log_analytics.name
+  workspace_name        = module.log_analytics.name
 
-  plan{
+  plan {
     publisher = "Microsoft"
-    product = "OMSGallery/ContainerInsights"
+    product   = "OMSGallery/ContainerInsights"
   }
 }
 
 module "aks" {
   source = "../modules/aks"
 
-  name = local.name
-  location = local.location
+  name                = local.name
+  location            = local.location
   resource_group_name = azurerm_resource_group.rg.name
-  vm_size = "Standard_D4s_v3"
-  log_analytics_id = module.log_analytics.id
-  vnet_subnet_id = module.aks_subnet.id
+  vm_size             = "Standard_D4s_v3"
+  log_analytics_id    = module.log_analytics.id
+  vnet_subnet_id      = module.aks_subnet.id
 
   tags = local.tags
 }
@@ -102,25 +103,25 @@ module "aks" {
 module "spark_node_pool" {
   source = "../modules/aks-node-pool"
 
-  name = "spark"
+  name           = "spark"
   aks_cluster_id = module.aks.id
-  vm_size = "Standard_D4s_v3"
-  node_count = 3
+  vm_size        = "Standard_D4s_v3"
+  node_count     = local.spark_aks_pool_size
   vnet_subnet_id = module.aks_subnet.id
-  
+
   tags = local.tags
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                     = local.name
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = local.location
-  sku                      = "Premium"
-  admin_enabled            = false
+  name                = local.name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = local.location
+  sku                 = "Premium"
+  admin_enabled       = false
 
   network_rule_set {
     virtual_network {
-      action = "Allow"
+      action    = "Allow"
       subnet_id = module.aks_subnet.id
     }
   }
@@ -131,12 +132,12 @@ resource "azurerm_container_registry" "acr" {
 module "adls_gen2" {
   source = "../modules/storage-account"
 
-  name = "${lower(local.name)}${random_id.storage.hex}"
-  location = local.location
-  resource_group_name = azurerm_resource_group.rg.name
-  account_tier = "Standard"
+  name                     = "${lower(local.name)}${random_id.storage.hex}"
+  location                 = local.location
+  resource_group_name      = azurerm_resource_group.rg.name
+  account_tier             = "Standard"
   account_replication_type = "LRS"
-  hns_enabled = true
+  hns_enabled              = true
 
   tags = local.tags
 }
