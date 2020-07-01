@@ -58,7 +58,7 @@ module "aks_subnet" {
   name                 = "aks_subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = module.vnet.name
-  address_prefixes     = ["10.10.1.0/24"]
+  address_prefixes     = ["10.10.0.0/21"]
 
   service_endpoints = ["Microsoft.ContainerRegistry"]
 
@@ -67,7 +67,7 @@ module "aks_subnet" {
 module "log_analytics" {
   source = "../modules/log-analytics"
 
-  name                = local.name
+  name                = "${lower(local.name)}${random_id.storage.hex}"
   location            = local.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -113,7 +113,7 @@ module "spark_node_pool" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = local.name
+  name                = "${lower(local.name)}${random_id.storage.hex}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = local.location
   sku                 = "Premium"
