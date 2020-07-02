@@ -135,6 +135,9 @@ module "spark_node_pool" {
   vm_size        = local.spark_cluster_vm_size
   node_count     = local.spark_aks_pool_size
   vnet_subnet_id = module.aks_subnet.id
+  node_labels = {
+    "app" : "spark",
+  }
 
   tags = local.tags
 }

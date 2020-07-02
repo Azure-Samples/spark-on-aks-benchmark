@@ -16,4 +16,7 @@ variable "node_count" {
 variable "vnet_subnet_id" {
   type = string
 }
+variable "node_labels" {
+  default = null
+}
 variable "tags" {}
