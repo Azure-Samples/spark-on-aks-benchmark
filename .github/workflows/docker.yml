@@ -8,6 +8,11 @@ on:
       - master
     paths:
       - '**/spark/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**/spark/**'
 jobs:
   build:
     name: "Docker Build"
