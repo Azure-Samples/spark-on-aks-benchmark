@@ -12,6 +12,8 @@ on:
   pull_request:
     branches:
       - master
+    paths:
+      - '**.tf'
 jobs:
   terraform:
     name: "Terraform"
