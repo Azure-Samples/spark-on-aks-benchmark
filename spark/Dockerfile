@@ -5,8 +5,8 @@
 FROM java:openjdk-9-jdk
 
 # Define Spark and Hadoop Verson
-ENV HADOOP_VERSION 2.9.2
-ENV SPARK_VERSION 2.4.6
+ENV HADOOP_VERSION 3.2.0
+ENV SPARK_VERSION 3.0.0
 
 # Download and install haddop
 RUN mkdir -p /opt && \
