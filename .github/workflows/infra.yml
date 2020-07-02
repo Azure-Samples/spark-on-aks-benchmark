@@ -45,12 +45,12 @@ jobs:
 
       # Generates an execution plan for Terraform
       - name: Terraform Plan
-        run: terraform plan -var="sub=${{ secrets.SUB }}" -var="client_id=${{ secrets.CLIENT_ID }}" -var="client_secret=${{ secrets.CLIENT_SECRET }}" -var="tenant_id=${{ secrets.TENANT_ID }}"
+        run: terraform plan -var="sub=${{ secrets.SUB }}" -var="client_id=${{ secrets.CLIENT_ID }}" -var="client_secret=${{ secrets.CLIENT_SECRET }}" -var="tenant_id=${{ secrets.TENANT_ID }}" -var="public_key=${{ secrets.PUBLIC_KEY }}"
         working-directory: ./env/base-cluster
 
         # On push to master, build or change infrastructure according to Terraform configuration files
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
-        run: terraform apply -auto-approve -var="sub=${{ secrets.SUB }}" -var="client_id=${{ secrets.CLIENT_ID }}" -var="client_secret=${{ secrets.CLIENT_SECRET }}" -var="tenant_id=${{ secrets.TENANT_ID }}"
+        run: terraform apply -auto-approve -var="sub=${{ secrets.SUB }}" -var="client_id=${{ secrets.CLIENT_ID }}" -var="client_secret=${{ secrets.CLIENT_SECRET }}" -var="tenant_id=${{ secrets.TENANT_ID }}" -var="public_key=${{ secrets.PUBLIC_KEY }}"
         working-directory: ./env/base-cluster
