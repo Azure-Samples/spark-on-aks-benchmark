@@ -14,3 +14,6 @@ variable "client_secret" {
 variable "tenant_id" {
   type = string
 }
+variable "public_key" {
+  type = string
+}
