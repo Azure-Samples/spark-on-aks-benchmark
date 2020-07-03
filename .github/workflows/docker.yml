@@ -47,5 +47,4 @@ jobs:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - run: |
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }}
+        run: docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }}
