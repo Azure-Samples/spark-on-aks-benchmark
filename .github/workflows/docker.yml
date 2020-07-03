@@ -31,7 +31,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-      - name: 'Build and push image'
+      - name: 'Build image'
         uses: azure/docker-login@v1
         with:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
@@ -39,4 +39,13 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
           docker build ./spark/ -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }}
+      
+      - name: 'Push image'
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }}
