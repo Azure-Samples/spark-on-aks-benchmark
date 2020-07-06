@@ -17,10 +17,13 @@ provider "azurerm" {
 }
 
 locals {
-  name                = "sparkOnAks"
-  location            = "westus2"
-  vnet_address_space  = ["10.10.0.0/16"]
-  spark_aks_pool_size = 30
+  name                  = "sparkOnAks"
+  location              = "westus2"
+  vnet_address_space    = ["10.10.0.0/16"]
+  spark_aks_pool_size   = 30
+  spark_cluster_vm_size = "Standard_D4s_v3"
+  admin_username        = "azureuser"
+
   tags = {
     owner    = terraform.workspace
     use_case = "testing"
@@ -64,6 +67,60 @@ module "aks_subnet" {
 
 }
 
+module "vm_subnet" {
+  source = "../modules/subnet"
+
+  name                 = "vms"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = module.vnet.name
+  address_prefixes     = ["10.10.8.0/24"]
+
+  service_endpoints = ["Microsoft.ContainerRegistry"]
+}
+
+module "bastion_subnet" {
+  source = "../modules/subnet"
+
+  name                 = "AzureBastionSubnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = module.vnet.name
+  address_prefixes     = ["10.10.9.224/27"]
+
+  service_endpoints = ["Microsoft.ContainerRegistry"]
+}
+
+resource "azurerm_public_ip" "bastion" {
+  name = "bastion_pip"
+  location = local.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method = "Static"
+  sku = "Standard"
+}
+
+resource "azurerm_bastion_host" "bastion" {
+  name = "bastion"
+  location = local.location
+  resource_group_name = azurerm_resource_group.rg.name
+  ip_configuration {
+    name = "configuration"
+    subnet_id = module.bastion_subnet.id
+    public_ip_address_id = azurerm_public_ip.bastion.id
+  }
+}
+
+module "producer_vm" {
+  source = "../modules/vm"
+
+  name                = "producer"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = local.location
+  vm_size             = "Standard_D4s_v3"
+  admin_username      = local.admin_username
+  subnet_id           = module.vm_subnet.id
+  public_key          = var.public_key
+  tags                = local.tags
+}
+
 module "log_analytics" {
   source = "../modules/log-analytics"
 
@@ -105,9 +162,12 @@ module "spark_node_pool" {
 
   name           = "spark"
   aks_cluster_id = module.aks.id
-  vm_size        = "Standard_D4s_v3"
+  vm_size        = local.spark_cluster_vm_size
   node_count     = local.spark_aks_pool_size
   vnet_subnet_id = module.aks_subnet.id
+  node_labels = {
+    "app" : "spark",
+  }
 
   tags = local.tags
 }

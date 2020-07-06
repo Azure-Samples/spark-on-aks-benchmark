@@ -7,12 +7,12 @@ on:
     branches:
       - master
     paths:
-      - '**/spark/**'
+      - 'spark/**'
   pull_request:
     branches:
       - master
     paths:
-      - '**/spark/**'
+      - 'spark/**'
 jobs:
   build:
     name: "Docker Build"
@@ -31,12 +31,16 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-      - name: 'Build and push image'
+      - name: 'Build image'
         uses: azure/docker-login@v1
         with:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }}
+          docker build ./spark/ -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }}
+      
+      - name: 'Push image'
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }}
