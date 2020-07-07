@@ -8,22 +8,26 @@ ARG spark_uid=185
 
 # Define Spark and Hadoop Verson
 ENV HADOOP_VERSION 3.2.0
+ENV HADOOP_SHORT_VERSION 3.2
 ENV SPARK_VERSION 3.0.0
 
 # Download and install haddop
 RUN mkdir -p /opt && \
     cd /opt && \
-    curl http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | \
-    tar -zx hadoop-${HADOOP_VERSION}/lib/native && \
+    curl -O http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz && \
+    tar -zxf hadoop-${HADOOP_VERSION}.tar.gz && \
     ln -s hadoop-${HADOOP_VERSION} hadoop && \
+    rm hadoop-${HADOOP_VERSION}.tar.gz && \
     echo Hadoop ${HADOOP_VERSION} native libraries installed in /opt/hadoop/lib/native
+
 
 # Download and install spark
 RUN mkdir -p /opt && \
     cd /opt && \
-    curl http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz | \
-    tar -zx && \
-    ln -s spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark && \
+    curl -O http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
+    tar -zxf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
+    rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
+    ln -s spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION} spark && \
     echo Spark ${SPARK_VERSION} installed in /opt
 
 # add scripts and update spark default config
