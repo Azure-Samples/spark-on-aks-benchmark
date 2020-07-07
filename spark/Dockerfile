@@ -21,9 +21,9 @@ RUN mkdir -p /opt && \
 # Download and install spark
 RUN mkdir -p /opt && \
     cd /opt && \
-    curl http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop2.7.tgz | \
+    curl http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz | \
     tar -zx && \
-    ln -s spark-${SPARK_VERSION}-bin-hadoop2.7 spark && \
+    ln -s spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark && \
     echo Spark ${SPARK_VERSION} installed in /opt
 
 # add scripts and update spark default config
