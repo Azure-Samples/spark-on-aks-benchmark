@@ -2,32 +2,50 @@
 # Licensed under the MIT license.
 
 # Base Image
-FROM java:openjdk-9-jdk
+FROM openjdk:9-jre-slim
 
 ARG spark_uid=185
 
 # Define Spark and Hadoop Verson
 ENV HADOOP_VERSION 3.2.0
+ENV HADOOP_SHORT_VERSION 3.2
 ENV SPARK_VERSION 3.0.0
+
+# Update Environment
+RUN set -ex && \
+    sed -i 's/http:/https:/g' /etc/apt/sources.list && \
+    apt-get update && \
+    ln -s /lib /lib64 && \
+    apt-get upgrade -y && \
+    apt install -y bash tini libc6 libpam-modules krb5-user libnss3 curl && \
+    rm /bin/sh && \
+    ln -sv /bin/bash /bin/sh && \
+    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
+    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
+    rm -rf /var/cache/apt/*
 
 # Download and install haddop
 RUN mkdir -p /opt && \
     cd /opt && \
-    curl http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | \
-    tar -zx hadoop-${HADOOP_VERSION}/lib/native && \
+    curl -O http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz && \
+    tar -zxf hadoop-${HADOOP_VERSION}.tar.gz && \
     ln -s hadoop-${HADOOP_VERSION} hadoop && \
+    rm hadoop-${HADOOP_VERSION}.tar.gz && \
     echo Hadoop ${HADOOP_VERSION} native libraries installed in /opt/hadoop/lib/native
+
 
 # Download and install spark
 RUN mkdir -p /opt && \
     cd /opt && \
-    curl http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop2.7.tgz | \
-    tar -zx && \
-    ln -s spark-${SPARK_VERSION}-bin-hadoop2.7 spark && \
-    echo Spark ${SPARK_VERSION} installed in /opt
+    curl -O http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
+    tar -zxf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
+    rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
+    ln -s spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION} spark && \
+    echo Spark ${SPARK_VERSION} installed in /opt && \
+    chmod g+w /opt/spark
 
 # add scripts and update spark default config
-ADD common.sh spark-master spark-worker entrypoint.sh /
+ADD common.sh spark-master spark-worker entrypoint.sh /opt/
 ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
 ENV PATH $PATH:/opt/spark/bin
 
