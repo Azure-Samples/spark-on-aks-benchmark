@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 
 # Base Image
-FROM java:openjdk-9-jdk
+FROM openjdk:9-jre-slim
 
 ARG spark_uid=185
 
@@ -10,6 +10,19 @@ ARG spark_uid=185
 ENV HADOOP_VERSION 3.2.0
 ENV HADOOP_SHORT_VERSION 3.2
 ENV SPARK_VERSION 3.0.0
+
+# Update Environment
+RUN set -ex && \
+    sed -i 's/http:/https:/g' /etc/apt/sources.list && \
+    apt-get update && \
+    ln -s /lib /lib64 && \
+    apt-get upgrade -y && \
+    apt install -y bash tini libc6 libpam-modules krb5-user libnss3 curl && \
+    rm /bin/sh && \
+    ln -sv /bin/bash /bin/sh && \
+    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
+    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
+    rm -rf /var/cache/apt/*
 
 # Download and install haddop
 RUN mkdir -p /opt && \
@@ -28,10 +41,11 @@ RUN mkdir -p /opt && \
     tar -zxf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
     rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
     ln -s spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION} spark && \
-    echo Spark ${SPARK_VERSION} installed in /opt
+    echo Spark ${SPARK_VERSION} installed in /opt && \
+    chmod g+w /opt/spark
 
 # add scripts and update spark default config
-ADD common.sh spark-master spark-worker entrypoint.sh /
+ADD common.sh spark-master spark-worker entrypoint.sh /opt/
 ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
 ENV PATH $PATH:/opt/spark/bin
 
