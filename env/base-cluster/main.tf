@@ -25,8 +25,8 @@ locals {
   admin_username        = "azureuser"
 
   tags = {
-    owner    = terraform.workspace
-    use_case = "testing"
+    owner    = terraform.workspace == "default" ? "Prod" : terraform.workspace
+    use_case = terraform.workspace == "Production" ? "Prod" : "Dev"
   }
 }
 
@@ -90,20 +90,20 @@ module "bastion_subnet" {
 }
 
 resource "azurerm_public_ip" "bastion" {
-  name = "bastion_pip"
-  location = local.location
+  name                = "bastion_pip"
+  location            = local.location
   resource_group_name = azurerm_resource_group.rg.name
-  allocation_method = "Static"
-  sku = "Standard"
+  allocation_method   = "Static"
+  sku                 = "Standard"
 }
 
 resource "azurerm_bastion_host" "bastion" {
-  name = "bastion"
-  location = local.location
+  name                = "bastion"
+  location            = local.location
   resource_group_name = azurerm_resource_group.rg.name
   ip_configuration {
-    name = "configuration"
-    subnet_id = module.bastion_subnet.id
+    name                 = "configuration"
+    subnet_id            = module.bastion_subnet.id
     public_ip_address_id = azurerm_public_ip.bastion.id
   }
 }
@@ -201,3 +201,4 @@ module "adls_gen2" {
 
   tags = local.tags
 }
+
