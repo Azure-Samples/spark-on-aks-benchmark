@@ -214,3 +214,9 @@ module "job_storage" {
 
   tags = local.tags
 }
+
+resource "azurerm_storage_container" "jars" {
+  name                  = "jars"
+  storage_account_name  = module.job_storage.name
+  container_access_type = "private"
+}
