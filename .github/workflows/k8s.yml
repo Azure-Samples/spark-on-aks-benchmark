@@ -31,11 +31,11 @@ jobs:
 
       # Azure Kubernetes Service set Context
       - name: AKS Set Context
-        uses: Azure/k8s-set-context@v1
+        uses: azure/aks-set-context@v1
           with:
             creds: '${{ secrets.AZURE_CREDENTIALS }}' # Azure credentials
-            resourceGroupName: '${{ secrets.AKS_RESOURCE_GROUP }}' # Must be changed if RG name changes
-            clusterName: '${{ secrets.AKS_CLUSTER_NAME }}'
+            resource-group: '${{ secrets.AKS_RESOURCE_GROUP }}' # Must be changed if RG name changes
+            cluster-name: '${{ secrets.AKS_CLUSTER_NAME }}'
       
       # Add ACR secrets to cluster
       - name: Add ACR Secrets
