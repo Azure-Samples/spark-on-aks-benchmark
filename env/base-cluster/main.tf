@@ -20,8 +20,8 @@ locals {
   name                  = "sparkOnAks"
   location              = "westus2"
   vnet_address_space    = ["10.10.0.0/16"]
-  spark_aks_pool_size   = 30
-  spark_cluster_vm_size = "Standard_D4s_v3"
+  spark_aks_pool_size   = terraform.workspace == "Default" ? 30 : 3
+  spark_cluster_vm_size = "Standard_E16s_v3"
   admin_username        = "azureuser"
 
   tags = {
