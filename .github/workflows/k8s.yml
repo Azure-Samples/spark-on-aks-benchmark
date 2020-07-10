@@ -31,7 +31,7 @@ jobs:
 
       # Azure Kubernetes Service set Context
       - name: AKS Set Context
-        uses: azure/aks-set-context@v1
+        uses: Azure/k8s-set-context@v1
           with:
             creds: '${{ secrets.AZURE_CREDENTIALS }}' # Azure credentials
             resourceGroupName: '${{ secrets.AKS_RESOURCE_GROUP }}' # Must be changed if RG name changes
