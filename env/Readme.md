@@ -31,14 +31,30 @@ Save the JSON output because it will be used later.
 
 ## Create a Storage Account for Terraform State
 
-The Terraform state file will be stored in Azure. This requires a Storage Account and Storage Container to be created.
+The Terraform state file will be stored in Azure. This requires a Storage Account and Storage Container to be created. The deployment of the VM will also require an ssh key
+
+**NOTE: These variables will be used through the example code below**
+
+## Variables
 
 ```bash
 LOCATION=westus
 RESOURCE_GROUP_NAME=shared
 STORAGE_ACCOUNT_NAME=mytfstate$RANDOM
 STATE_CONTAINER_NAME=tfstate
+SSH_KEY_NAME=spark-on-azure
 
+#These variables are set from the JSON output above
+# TODO: Script and parse this output from above
+DEV_CLIENT_ID=xxxx6ddc-xxxx-xxxx-xxx-ef78a99dxxxx
+DEV_CLIENT_SECRET=xxxx79dc-xxxx-xxxx-xxxx-aaaaaec5xxxx
+DEV_SUB_ID=xxxx251c-xxxx-xxxx-xxxx-bf99a306xxxx
+DEV_TENANT_ID=xxxx88bf-xxxx-xxxx-xxxx-2d7cd011xxxx
+```
+
+## Create the Azure Resources
+
+```bash
 az group create \
   --location $LOCATION \
   --name $RESOURCE_GROUP_NAME
@@ -60,6 +76,15 @@ az storage container create \
   --account-key $STORAGE_ACCOUNT_KEY
 ```
 
+## Create an SSH Key
+
+```bash
+ssh-keygen \
+  -b 4096 \
+  -f ~/.ssh/$SSH_KEY_NAME
+SSH_PUBLIC_KEY=$(cat ~/.ssh/$SSH_KEY_NAME)
+```
+
 ## Deploy terraform locally
 
 ```bash
@@ -70,7 +95,32 @@ terraform init \
   -backend-config="key=sparkonaks.tfstate" \
   -backend-config="access_key=$STORAGE_ACCOUNT_KEY"
 
-terraform plan
+terraform plan \
+  -var="sub=$DEV_SUB_ID" \
+  -var="client_id=$DEV_CLIENT_ID" \
+  -var="client_secret=$DEV_CLIENT_SECRET" \
+  -var="tenant_id=$DEV_TENANT_ID" \
+  -var="public_key=$SSH_PUBLIC_KEY"
 
-terraform apply -auto-approve
+terraform apply \
+  -auto-approve \
+  -var="sub=$DEV_SUB_ID" \
+  -var="client_id=$DEV_CLIENT_ID" \
+  -var="client_secret=$DEV_CLIENT_SECRET" \
+  -var="tenant_id=$DEV_TENANT_ID" \
+  -var="public_key=$SSH_PUBLIC_KEY"
+```
+
+## Destroy the test environment
+
+To cleanup the test environment run the following command
+
+```bash
+terraform destroy \
+  -auto-approve \
+  -var="sub=$DEV_SUB_ID" \
+  -var="client_id=$DEV_CLIENT_ID" \
+  -var="client_secret=$DEV_CLIENT_SECRET" \
+  -var="tenant_id=$DEV_TENANT_ID" \
+  -var="public_key=$SSH_PUBLIC_KEY"
 ```
