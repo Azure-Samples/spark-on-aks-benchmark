@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build ./spark/ -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:1
+          docker build ./spark/ -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:stable
       
       - name: 'Push image'
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
