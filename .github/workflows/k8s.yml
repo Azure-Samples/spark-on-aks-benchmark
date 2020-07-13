@@ -29,17 +29,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # Azure Kubernetes Service set Context
-      - name: AKS Set Context
-        uses: azure/aks-set-context@v1
-          with:
-            creds: '${{ secrets.AZURE_CREDENTIALS }}' # Azure credentials
-            resource-group: '${{ secrets.AKS_RESOURCE_GROUP }}' # Must be changed if RG name changes
-            cluster-name: '${{ secrets.AKS_CLUSTER_NAME }}'
+        # Set the target AKS cluster.
+      - uses: Azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}' # Azure credentials
+          resource-group: '${{ secrets.AKS_RESOURCE_GROUP }}' # Must be changed if RG name changes
+          cluster-name: '${{ secrets.AKS_CLUSTER_NAME }}'
       
       # Add ACR secrets to cluster
-      - name: Add ACR Secrets
-        uses: Azure/k8s-create-secret@v1
+      - uses: Azure/k8s-create-secret@v1
         with:
             container-registry-url: '${{ secrets.REGISTRY_LOGIN_SERVER }}'
             container-registry-username: '${{ secrets.REGISTRY_USERNAME }}'
@@ -47,8 +45,7 @@ jobs:
             secret-name: acr
       
       # Deploy manifests to cluster
-      - name: Deploy Kubernetes Manifests
-        uses: Azure/k8s-deploy@v1
+      - uses: Azure/k8s-deploy@v1
         with:
           manifests: |
             kubernetes/spark-namespace.yaml
