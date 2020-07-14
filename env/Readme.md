@@ -1,5 +1,9 @@
 # Setting up the Base Cluster
 
+## Prerequisites
+
+This project requires [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) and the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+
 ## Create the Service Principal
 
 Testing the base cluster locally requires an Azure AD Service Principal
@@ -34,6 +38,14 @@ Save the JSON output because it will be used later.
 The Terraform state file will be stored in Azure. This requires a Storage Account and Storage Container to be created. The deployment of the VM will also require an ssh key
 
 **NOTE: These variables will be used through the example code below**
+
+## Terraform Workspace
+
+Terraform has a workspace concept and when creating a development environment some variables in the deployment will use this workspace information to limit the number of items deployed to control resources in lower environments.
+
+```bash
+terraform workspace new $(whoami) #This will create a workspace based on the computer username. This can be replaced with any value other than default
+```
 
 ## Variables
 
