@@ -1,6 +1,18 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license
 
+locals {
+  aks_name = "${terraform.workspace}-${var.name}-k8s-${random_id.aks.hex}"
+}
+
+resource "random_id" "aks" {
+  keepers = {
+    aks = var.name
+  }
+
+  byte_length = 4
+}
+
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "${var.name}-k8s"
   location            = var.location
@@ -25,8 +37,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_plugin = "azure"
   }
 
-  identity {
-    type = "SystemAssigned"
+  # identity {
+  #   type = "SystemAssigned"
+  # }
+
+  service_principal {
+    client_id = azuread_service_principal.aks_sp.application_id
+    client_secret = random_string.aks_sp_password.result
   }
 
   addon_profile {
