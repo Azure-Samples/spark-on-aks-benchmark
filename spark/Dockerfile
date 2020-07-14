@@ -10,6 +10,11 @@ ARG spark_uid=185
 ENV HADOOP_VERSION 3.2.0
 ENV HADOOP_SHORT_VERSION 3.2
 ENV SPARK_VERSION 3.0.0
+ENV SPARK_HOME=/opt/spark
+ENV PATH=$PATH:$SPARK_HOME/bin
+ENV HADOOP_HOME=/opt/hadoop
+ENV PATH=$PATH:$HADOOP_HOME/bin
+ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native
 
 # Update Environment
 RUN set -ex && \
@@ -45,11 +50,13 @@ RUN mkdir -p /opt && \
     chmod g+w /opt/spark
 
 # add scripts and update spark default config
-ADD common.sh spark-master spark-worker entrypoint.sh /opt/
+# ADD common.sh start-master start-worker entrypoint.sh /opt/
+ADD start-common.sh start-master start-worker /opt/
 ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
+ADD core-site.xml /opt/spark/conf/core-site.xml
 ENV PATH $PATH:/opt/spark/bin
 
-ENTRYPOINT [ "/opt/entrypoint.sh" ]
+# ENTRYPOINT [ "/opt/entrypoint.sh" ]
 
 # Specify the User that the actual main process will run as
 USER ${spark_uid}
