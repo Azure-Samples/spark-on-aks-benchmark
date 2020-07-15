@@ -18,9 +18,9 @@ spec:
       subdomain: spark-master-headless
       containers:
         - name: spark-master
-          image: sparkonaks4fe1756f.azurecr.io/spark-on-aks:f97773f3f74846a02898cbfb4c3fbfd37b1f8baf
+          image: sparkonaks4fe1756f.azurecr.io/spark-on-aks:stable
           imagePullPolicy: Always
-          command: ["/start-master"]
+          command: ["/opt/start-master"]
           ports:
             - containerPort: 7077
             - containerPort: 8080
