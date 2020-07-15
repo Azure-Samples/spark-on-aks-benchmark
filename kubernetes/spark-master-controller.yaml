@@ -1,0 +1,31 @@
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: spark-master-controller
+  namespace: spark
+  labels:
+    app: spark
+spec:
+  replicas: 1
+  selector:
+    component: spark-master
+  template:
+    metadata:
+      labels:
+        component: spark-master
+    spec:
+      hostname: spark-master-hostname
+      subdomain: spark-master-headless
+      containers:
+        - name: spark-master
+          image: sparkonaks4fe1756f.azurecr.io/spark-on-aks:stable
+          imagePullPolicy: Always
+          command: ["/opt/start-master"]
+          ports:
+            - containerPort: 7077
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+      nodeSelector:
+        app: spark

@@ -8,7 +8,7 @@ on:
     branches:
       - master
     paths:
-      - 'kubernetes/**'
+      - "kubernetes/**"
   # pull_request:
   #   branches:
   #     - master
@@ -32,22 +32,27 @@ jobs:
         # Set the target AKS cluster.
       - uses: Azure/aks-set-context@v1
         with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}' # Azure credentials
-          resource-group: '${{ secrets.AKS_RESOURCE_GROUP }}' # Must be changed if RG name changes
-          cluster-name: '${{ secrets.AKS_CLUSTER_NAME }}'
-      
+          creds: "${{ secrets.AZURE_CREDENTIALS }}" # Azure credentials
+          resource-group: "${{ secrets.AKS_RESOURCE_GROUP }}" # Must be changed if RG name changes
+          cluster-name: "${{ secrets.AKS_CLUSTER_NAME }}"
+
       # Add ACR secrets to cluster
       - uses: Azure/k8s-create-secret@v1
         with:
-            container-registry-url: '${{ secrets.REGISTRY_LOGIN_SERVER }}'
-            container-registry-username: '${{ secrets.REGISTRY_USERNAME }}'
-            container-registry-password: '${{ secrets.REGISTRY_PASSWORD }}'
-            secret-name: acr
-      
+          container-registry-url: "${{ secrets.REGISTRY_LOGIN_SERVER }}"
+          container-registry-username: "${{ secrets.REGISTRY_USERNAME }}"
+          container-registry-password: "${{ secrets.REGISTRY_PASSWORD }}"
+          secret-name: acr
+
       # Deploy manifests to cluster
       - uses: Azure/k8s-deploy@v1
         with:
+          namespace: spark
           manifests: |
+            kubernetes/psp-deny-privileged.yaml
+            kubernetes/psp-deny-privileged-clusterrole.yaml
+            kubernetes/psp-deny-privileged-clusterrolebinding.yaml
             kubernetes/spark-namespace.yaml
-            kubernetes/spark-role-cluster-role-binding.yaml
-            kubernetes/spark-service-account.yaml
+            kubernetes/spark-master-service.yaml
+            kubernetes/spark-master-controller.yaml
+            kubernetes/spark-worker-controller.yaml

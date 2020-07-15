@@ -1,9 +1,6 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT license.
-
 #!/bin/bash
 
-. /common.sh
+. /opt/common.sh
 
 if ! getent hosts spark-master; then
   sleep 5

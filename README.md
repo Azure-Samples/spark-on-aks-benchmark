@@ -21,6 +21,14 @@ Taxonomies for products and languages: https://review.docs.microsoft.com/new-hop
 
 This project tests Azure Spark performance on AKS. The goal is to optimize
 
+## Build Status
+
+| Pipeline   | Status                                                                                                  |
+| ---------- | ------------------------------------------------------------------------------------------------------- |
+| Terraform  | ![Terraform](https://github.com/Azure/spark-on-aks/workflows/Terraform/badge.svg)                       |
+| Docker     | ![Spark Docker Image](https://github.com/Azure/spark-on-aks/workflows/Spark%20Docker%20Image/badge.svg) |
+| Kubernetes | ![Kubernetes](https://github.com/Azure/spark-on-aks/workflows/Kubernetes/badge.svg)                     |
+
 ## Contents
 
 | File/folder       | Description                                |

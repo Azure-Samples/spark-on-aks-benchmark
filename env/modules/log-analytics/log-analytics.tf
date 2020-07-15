@@ -8,4 +8,10 @@ resource "azurerm_log_analytics_workspace" "la" {
   sku = var.sku
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      name,
+    ]
+  }
 }
