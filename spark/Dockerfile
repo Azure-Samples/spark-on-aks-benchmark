@@ -4,8 +4,6 @@
 # Base Image
 FROM openjdk:9-jre-slim
 
-ARG spark_uid=185
-
 # Define Spark and Hadoop Verson
 ENV HADOOP_VERSION 3.2.0
 ENV HADOOP_SHORT_VERSION 3.2
@@ -50,13 +48,8 @@ RUN mkdir -p /opt && \
     chmod g+w /opt/spark
 
 # add scripts and update spark default config
-# ADD common.sh start-master start-worker entrypoint.sh /opt/
-ADD start-common.sh start-master start-worker /opt/
+ADD start-common.sh common.sh start-master start-worker /opt/
 ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
 ADD core-site.xml /opt/spark/conf/core-site.xml
 ENV PATH $PATH:/opt/spark/bin
-
-# ENTRYPOINT [ "/opt/entrypoint.sh" ]
-
-# Specify the User that the actual main process will run as
-USER ${spark_uid}
+RUN chmod +x /opt/start-common.sh /opt/start-master /opt/start-worker

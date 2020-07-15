@@ -1,9 +1,6 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT license.
-
 #!/bin/bash
 
-. /common.sh
+. /opt/common.sh
 
 echo "$(hostname -i) spark-master" >> /etc/hosts
 
