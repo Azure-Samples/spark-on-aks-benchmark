@@ -30,7 +30,7 @@ module "spark_node_pool" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "${lower(local.name)}${random_id.storage.hex}"
+  name                = "sparkacr${random_id.storage.hex}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = local.location
   sku                 = "Premium"
@@ -49,12 +49,12 @@ resource "azurerm_container_registry" "acr" {
 }
 
 resource "azurerm_role_assignment" "acr" {
-  scope = azurerm_container_registry.acr.id
+  scope                = azurerm_container_registry.acr.id
   role_definition_name = "acrpull"
-  principal_id = module.aks.aks_aad_object_id
+  principal_id         = module.aks.aks_aad_object_id
 
   depends_on = [
     azurerm_container_registry.acr,
-    
+
   ]
 }
