@@ -13,11 +13,16 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
   features {}
 }
-provider "azuread" {}
+provider "azuread" {
+  subscription_id = var.sub
+  client_id       = var.client_id
+  client_secret   = var.client_secret
+  tenant_id       = var.tenant_id
+}
 provider "random" {}
 
 locals {
-  name                  = "sparkOnAks"
+  name                  = terraform.workspace == "Default" ? "sparkOnAks" : "${terraform.workspace}-sparkOnAks"
   location              = "westus2"
   vnet_address_space    = ["10.10.0.0/16"]
   spark_aks_pool_size   = terraform.workspace == "Default" ? 30 : 3
