@@ -33,6 +33,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
 
       - name: Check Terraform version
         run: terraform version
@@ -51,40 +53,28 @@ jobs:
         working-directory: ./env/base-cluster
         continue-on-error: true
 
-        # Write output to PR
-      - uses: actions/github-script@0.9.0
-        if: github.event_name == 'pull_request'
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-            <details><summary>Show Plan</summary>
-
-            \`\`\`${process.env.PLAN}\`\`\`
-
-            </details>
-
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-              
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-
         # On push to master, build or change infrastructure according to Terraform configuration files
       - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: terraform apply -auto-approve -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" -var="public_key=$PUBLIC_KEY"
         working-directory: ./env/base-cluster
+
+        # Output Terraform apply outputs to text files and uplaod as artifacts
+      - run: echo "$(terraform output acr_name)" > acr_name.txt
+      - run: echo "$(terraform output aks_name)" > aks_name.txt
+
+      - name: Upload ACR Terraform Output
+        uses: actions/upload-artifact@v1
+        with:
+          name: acr
+          path: acr_name.txt
+
+      - name: Upload AKS Terraform Output
+        uses: actions/upload-artifact@v1
+        with:
+          name: aks
+          path: aks_name.txt
 
   docker:
     needs: terraform
@@ -95,8 +85,18 @@ jobs:
       run:
         shell: bash
 
+    env:
+      REGISTRY_LOGIN_SERVER: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+
     steps:
       - uses: actions/checkout@v2
+      - name: Download ACR Name
+        uses: actions/download-artifact@v1
+        with:
+          name: acr
+      - run: |
+          ACR=`cat acr_name.txt`
+
       - name: "Login via Azure CLI"
         uses: azure/login@v1
         with:
@@ -104,5 +104,9 @@ jobs:
 
       - name: "Build image"
         uses: azure/docker-login@v1
+        with:
+          login-server: $ACR
+          username: ${{ secrets.CLIENT_ID }}
+          password: ${{ secrets.CLIENT_SECRET }}
       - run: |
-          docker build ./spark/ -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:stable
+          docker build ./spark/ -t $ACR/spark-on-aks:${{ github.sha }} -t $ACR/spark-on-aks:stable
