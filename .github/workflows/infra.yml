@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - master
+      - release/*
   pull_request:
     branches:
       - master
@@ -100,3 +101,24 @@ jobs:
           -var="tenant_id=$TENANT_ID" \
           -var="public_key=$PUBLIC_KEY"
         working-directory: ./env/base-cluster
+
+  docker:
+    needs: terraform
+    runs-on: ubuntu-latest
+    name: "Docker"
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Build image"
+        uses: azure/docker-login@v1
+      - run: |
+          docker build ./spark/ -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:${{ github.sha }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/spark-on-aks:stable
