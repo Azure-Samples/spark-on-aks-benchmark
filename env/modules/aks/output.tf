@@ -7,3 +7,6 @@ output "id" {
 output "aks_aad_object_id" {
   value = azuread_service_principal.aks_sp.object_id
 }
+output "name" {
+  value azurerm_kubernetes_cluster.aks.name
+}
