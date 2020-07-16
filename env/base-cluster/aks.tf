@@ -58,3 +58,13 @@ resource "azurerm_role_assignment" "acr" {
 
   ]
 }
+
+resource "azurerm_role_assignment" "cd_push" {
+  scope                = azurerm_container_registry.acr.id
+  role_definition_name = "acrpush"
+  principal_id         = data.azurerm_client_config.current.object_id
+
+  depends_on = [
+    azurerm_container_registry.acr,
+  ]
+}

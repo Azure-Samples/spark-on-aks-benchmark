@@ -5,6 +5,8 @@ terraform {
   backend "azurerm" {}
 }
 
+data "azurerm_client_config" "current" {}
+
 # Azure RM Provider
 provider "azurerm" {
   subscription_id = var.sub
