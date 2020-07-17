@@ -59,6 +59,11 @@ jobs:
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
           terraform apply -auto-approve -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" -var="public_key=$PUBLIC_KEY"
+        working-directory: ./env/base-cluster
+
+      - name: Terraform Output
+        id: output
+        run: |
           echo $(terraform output acr_name) > acr_name.txt
           echo $(terraform output aks_name) > aks_name.txt
           echo $(terraform output rg_name) > rg_name.txt
