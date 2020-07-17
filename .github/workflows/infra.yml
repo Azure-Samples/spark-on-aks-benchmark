@@ -102,9 +102,15 @@ jobs:
           username: ${{ secrets.CLIENT_ID }}
           password: ${{ secrets.CLIENT_SECRET }}
 
-      - name: Docker Build
+      - name: Docker Build PR
+        if: github.event_name == 'pull_request'
         run: |
-          docker build ./spark/ -t ${{ env.ACR }}.azurecr.io/spark-on-aks:${{ github.sha }} -t ${{ env.ACR }}/spark-on-aks:stable
+          docker build ./spark/ -t ${{ env.ACR }}.azurecr.io/spark-on-aks:${{ github.sha }}
+
+      - name: Docker Build Stable
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          docker build ./spark/ -t ${{ env.ACR }}.azurecr.io/spark-on-aks:${{ github.sha }} -t ${{ env.ACR }}.azurecr.io/spark-on-aks:stable
 
       - name: Docker Push Commit
         if: github.event_name == 'pull_request'
