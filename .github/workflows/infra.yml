@@ -61,29 +61,22 @@ jobs:
           terraform apply -auto-approve -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" -var="public_key=$PUBLIC_KEY"
           echo $(terraform output acr_name) > acr_name.txt
           echo $(terraform output aks_name) > aks_name.txt
+          echo $(terraform output rg_name) > rg_name.txt
         working-directory: ./env/base-cluster
 
-      #   # Output Terraform apply outputs to text files and uplaod as artifacts
-      # - name: Upload Outputs
-      #   id: upload
+      - name: Upload Terraform Output
+        # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        uses: actions/upload-artifact@v2
+        with:
+          name: drop
+          path: ./env/base-cluster/*.txt
+
+      # - name: Upload AKS Terraform Output
       #   # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      #   run: |
-      #     echo $(terraform output acr_name) > acr_name.txt
-      #     echo $(terraform output aks_name) > aks_name.txt
-
-      - name: Upload ACR Terraform Output
-        # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        uses: actions/upload-artifact@v1
-        with:
-          name: acr
-          path: ./env/base-cluster/acr_name.txt
-
-      - name: Upload AKS Terraform Output
-        # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        uses: actions/upload-artifact@v1
-        with:
-          name: aks
-          path: ./env/base-cluster/aks_name.txt
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: aks
+      #     path: ./env/base-cluster/aks_name.txt
 
   docker:
     needs: terraform
@@ -94,25 +87,17 @@ jobs:
       run:
         shell: bash
 
-    env:
-      REGISTRY_LOGIN_SERVER: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-
     steps:
       - uses: actions/checkout@v2
       - name: Download ACR Name
         uses: actions/download-artifact@v1
         with:
-          name: acr
+          name: drop
 
       - name: Set Variable
         run: |
-          echo ::set-env name=ACR::$(cat acr/acr_name.txt)
+          echo ::set-env name=ACR::$(cat drop/acr_name.txt)
           echo $ACR
-
-      # - name: Login via Azure CLI
-      #   uses: azure/login@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Build Image
         uses: azure/docker-login@v1
@@ -123,3 +108,46 @@ jobs:
       - run: |
           echo The ACR is still: $ACR
           docker build ./spark/ -t $ACR/spark-on-aks:${{ github.sha }} -t $ACR/spark-on-aks:stable
+
+  aks:
+    needs: docker
+    runs-on: ubuntu-latest
+    name: "Kubernetes"
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download ACR Name
+        uses: actions/download-artifact@v1
+        with:
+          name: drop
+
+      - name: Set Variable
+        run: |
+          echo ::set-env name=AKS::$(cat drop/aks_name.txt)
+          echo ::set-env name=AKS_RG::$(cat drop/rg_name.txt)
+          echo $AKS
+          echo $AKS_RG
+
+      # Set the target AKS cluster.
+      - uses: Azure/aks-set-context@v1
+        with:
+          creds: "${{ secrets.AZURE_CREDENTIALS }}" # Azure credentials
+          resource-group: "$AKS_RG"
+          cluster-name: $AKS
+
+      # Deploy manifests to cluster
+      - uses: Azure/k8s-deploy@v1
+        with:
+          namespace: spark
+          manifests: |
+            kubernetes/psp-deny-privileged.yaml
+            kubernetes/psp-deny-privileged-clusterrole.yaml
+            kubernetes/psp-deny-privileged-clusterrolebinding.yaml
+            kubernetes/spark-namespace.yaml
+            kubernetes/spark-master-service.yaml
+            kubernetes/spark-master-controller.yaml
+            kubernetes/spark-worker-controller.yaml
