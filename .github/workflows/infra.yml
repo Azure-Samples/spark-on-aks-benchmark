@@ -98,6 +98,10 @@ jobs:
           username: ${{ secrets.CLIENT_ID }}
           password: ${{ secrets.CLIENT_SECRET }}
 
+      - name: Debug Docker Login
+        run: |
+          cat ${{ env.DOCKER_CONFIG }}/config.json
+
       - name: Docker Build
         run: |
           docker build ./spark/ -t ${{ env.ACR }}.azurecr.io/spark-on-aks:${{ github.sha }} -t ${{ env.ACR }}/spark-on-aks:stable
