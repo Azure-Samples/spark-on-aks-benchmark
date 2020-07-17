@@ -83,29 +83,30 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Download ACR Name
+        id: acr_vars
         uses: actions/download-artifact@v1
         with:
           name: drop
 
       - name: Set Variable
         run: |
-          echo ::set-env name=ACR::$(cat drop/acr_name.txt)
+          echo ::set-output name=ACR::$(cat drop/acr_name.txt)
 
       - name: Docker Login
         uses: azure/docker-login@v1
         with:
-          login-server: $ACR
+          login-server: ${{ steps.acr_vars.outputs.ACR}}
           username: ${{ secrets.CLIENT_ID }}
           password: ${{ secrets.CLIENT_SECRET }}
 
       - name: Docker Build
         run: |
-          docker build ./spark/ -t $ACR/spark-on-aks:${{ github.sha }} -t $ACR/spark-on-aks:stable
+          docker build ./spark/ -t ${{ steps.acr_vars.outputs.ACR}}/spark-on-aks:${{ github.sha }} -t ${{ steps.acr_vars.outputs.ACR}}/spark-on-aks:stable
 
       - name: Docker push
         # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
-          docker push $ACR/spark-on-aks:${{ github.sha }}
+          docker push ${{ steps.acr_vars.outputs.ACR}}/spark-on-aks:${{ github.sha }}
 
   aks:
     needs: docker
