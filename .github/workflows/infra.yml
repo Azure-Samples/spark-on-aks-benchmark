@@ -107,7 +107,7 @@ jobs:
       - name: Set Variable
         run: |
           ACR=`cat acr/acr_name.txt`
-          echo ${{ACR}}
+          echo $ACR
 
       - name: Login via Azure CLI
         uses: azure/login@v1
@@ -121,4 +121,5 @@ jobs:
           username: ${{ secrets.CLIENT_ID }}
           password: ${{ secrets.CLIENT_SECRET }}
       - run: |
-          docker build ./spark/ -t ${{ACR}}/spark-on-aks:${{ github.sha }} -t ${{ACR}}/spark-on-aks:stable
+          echo The ACR is still: $ACR
+          docker build ./spark/ -t $ACR/spark-on-aks:${{ github.sha }} -t $ACR/spark-on-aks:stable
