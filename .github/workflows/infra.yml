@@ -91,15 +91,21 @@ jobs:
         run: |
           echo ::set-env name=ACR::$(cat drop/acr_name.txt)
 
-      - name: Build Image
+      - name: Docker Login
         uses: azure/docker-login@v1
         with:
           login-server: $ACR
           username: ${{ secrets.CLIENT_ID }}
           password: ${{ secrets.CLIENT_SECRET }}
-      - run: |
-          echo The ACR is still: $ACR
+
+      - name: Docker Build
+        run: |
           docker build ./spark/ -t $ACR/spark-on-aks:${{ github.sha }} -t $ACR/spark-on-aks:stable
+
+      - name: Docker push
+        # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          docker push-t $ACR/spark-on-aks:${{ github.sha }} -t $ACR/spark-on-aks:stable
 
   aks:
     needs: docker
@@ -118,16 +124,17 @@ jobs:
           name: drop
 
       - name: Set Variable
+        id: vars
         run: |
-          echo ::set-env name=AKS::$(cat drop/aks_name.txt)
-          echo ::set-env name=AKS_RG::$(cat drop/rg_name.txt)
+          echo ::set-output name=AKS::$(cat drop/aks_name.txt)
+          echo ::set-output name=AKS_RG::$(cat drop/rg_name.txt)
 
       # Set the target AKS cluster.
       - uses: Azure/aks-set-context@v1
         with:
           creds: "${{ secrets.AZURE_CREDENTIALS }}" # Azure credentials
-          resource-group: $AKS_RG
-          cluster-name: $AKS
+          resource-group: ${{ steps.vars.outputs.AKS_RG }}
+          cluster-name: ${{ steps.vars.outputs.AKS }}
 
       # Deploy manifests to cluster
       - uses: Azure/k8s-deploy@v1
