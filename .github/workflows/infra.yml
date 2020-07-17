@@ -89,7 +89,7 @@ jobs:
 
       - name: Set Variable
         run: |
-          echo ::set-output name=ACR::$(cat drop/acr_name.txt)
+          echo ::set-env name=ACR::$(cat drop/acr_name.txt)
 
       - name: Docker Login
         uses: azure/docker-login@v1
@@ -105,7 +105,7 @@ jobs:
       - name: Docker push
         # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
-          docker push $ACR/spark-on-aks:${{ github.sha }}
+          docker push ${{ env.ACR }}/spark-on-aks:${{ github.sha }}
 
   aks:
     needs: docker
