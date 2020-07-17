@@ -69,12 +69,14 @@ jobs:
           echo "$(terraform output aks_name)" > aks_name.txt
 
       - name: Upload ACR Terraform Output
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         uses: actions/upload-artifact@v1
         with:
           name: acr
           path: acr_name.txt
 
       - name: Upload AKS Terraform Output
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         uses: actions/upload-artifact@v1
         with:
           name: aks
