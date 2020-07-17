@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: spark-worker
-          image: sparkonaks4fe1756f.azurecr.io/spark-on-aks:stable
+          image: sparkacrbacf.azurecr.io/spark-on-aks:stable
           imagePullPolicy: Always
           command: ["/opt/start-worker"]
           ports:

@@ -1,19 +1,16 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-name: "Terraform"
+name: "Production"
 
 on:
   push:
     branches:
       - master
-    paths:
-      - '**.tf'
+      - release/*
   pull_request:
     branches:
       - master
-    paths:
-      - '**.tf'
 jobs:
   terraform:
     name: "Terraform"
@@ -24,33 +21,145 @@ jobs:
       run:
         shell: bash
 
+    # Set environment variables for steps
+    env:
+      SUB: ${{ secrets.SUB }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+
     # Checkout the repository to the GitHub Actions runner
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      # Install the latest version of Terraform CLI
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        # with:
-        #   terraform_version: 0.12.26
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
 
       - name: Check Terraform version
         run: terraform version
+        id: version
 
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
+        id: init
         run: terraform init -backend-config="resource_group_name=${{ secrets.TF_STORAGE_RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ secrets.TF_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.TF_STORAGE_CONTAINER_NAME }}" -backend-config="key=${{ secrets.TF_STORAGE_KEY }}" -backend-config="access_key=${{ secrets.TF_STORAGE_ACCESS_KEY }}"
         working-directory: ./env/base-cluster
 
       # Generates an execution plan for Terraform
       - name: Terraform Plan
-        run: terraform plan -var="sub=${{ secrets.SUB }}" -var="client_id=${{ secrets.CLIENT_ID }}" -var="client_secret=${{ secrets.CLIENT_SECRET }}" -var="tenant_id=${{ secrets.TENANT_ID }}" -var="public_key=${{ secrets.PUBLIC_KEY }}"
+        id: plan
+        run: terraform plan -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" -var="public_key=$PUBLIC_KEY"
         working-directory: ./env/base-cluster
+        continue-on-error: true
 
         # On push to master, build or change infrastructure according to Terraform configuration files
       - name: Terraform Apply
+        id: apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-
-        run: terraform apply -auto-approve -var="sub=${{ secrets.SUB }}" -var="client_id=${{ secrets.CLIENT_ID }}" -var="client_secret=${{ secrets.CLIENT_SECRET }}" -var="tenant_id=${{ secrets.TENANT_ID }}" -var="public_key=${{ secrets.PUBLIC_KEY }}"
+        run: |
+          terraform apply -auto-approve -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" -var="public_key=$PUBLIC_KEY"
         working-directory: ./env/base-cluster
+
+      - name: Terraform Output
+        id: output
+        run: |
+          echo $(terraform output acr_name) > acr_name.txt
+          echo $(terraform output aks_name) > aks_name.txt
+          echo $(terraform output rg_name) > rg_name.txt
+        working-directory: ./env/base-cluster
+
+      - name: Upload Terraform Output
+        uses: actions/upload-artifact@v2
+        with:
+          name: drop
+          path: ./env/base-cluster/*.txt
+
+  docker:
+    needs: terraform
+    runs-on: ubuntu-latest
+    name: "Docker"
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download ACR Name
+        uses: actions/download-artifact@v1
+        with:
+          name: drop
+
+      - name: Set Variable
+        run: |
+          echo ::set-env name=ACR::$(cat drop/acr_name.txt)
+
+      - name: Docker Login
+        uses: azure/docker-login@v1
+        with:
+          login-server: "${{ env.ACR }}.azurecr.io"
+          username: ${{ secrets.CLIENT_ID }}
+          password: ${{ secrets.CLIENT_SECRET }}
+
+      - name: Docker Build PR
+        if: github.event_name == 'pull_request'
+        run: |
+          docker build ./spark/ -t ${{ env.ACR }}.azurecr.io/spark-on-aks:${{ github.sha }}
+
+      - name: Docker Build Stable
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          docker build ./spark/ -t ${{ env.ACR }}.azurecr.io/spark-on-aks:${{ github.sha }} -t ${{ env.ACR }}.azurecr.io/spark-on-aks:stable
+
+      - name: Docker Push Commit
+        if: github.event_name == 'pull_request'
+        run: |
+          docker push ${{ env.ACR }}.azurecr.io/spark-on-aks:${{ github.sha }}
+
+      - name: Docker Push Stable
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          docker push ${{ env.ACR }}.azurecr.io/spark-on-aks:stable
+
+  aks:
+    needs: docker
+    runs-on: ubuntu-latest
+    name: "Kubernetes"
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download Drop
+        uses: actions/download-artifact@v1
+        with:
+          name: drop
+
+      - name: Set Variable
+        id: vars
+        run: |
+          echo ::set-output name=AKS::$(cat drop/aks_name.txt)
+          echo ::set-output name=AKS_RG::$(cat drop/rg_name.txt)
+
+      # Set the target AKS cluster.
+      - uses: Azure/aks-set-context@v1
+        with:
+          creds: "${{ secrets.AZURE_CREDENTIALS }}" # Azure credentials
+          resource-group: ${{ steps.vars.outputs.AKS_RG }}
+          cluster-name: ${{ steps.vars.outputs.AKS }}
+
+      # Deploy manifests to cluster
+      - uses: Azure/k8s-deploy@v1
+        with:
+          namespace: spark
+          manifests: |
+            kubernetes/psp-deny-privileged.yaml
+            kubernetes/psp-deny-privileged-clusterrole.yaml
+            kubernetes/psp-deny-privileged-clusterrolebinding.yaml
+            kubernetes/spark-namespace.yaml
+            kubernetes/spark-master-service.yaml
+            kubernetes/spark-master-controller.yaml
+            kubernetes/spark-worker-controller.yaml
