@@ -71,13 +71,6 @@ jobs:
           name: drop
           path: ./env/base-cluster/*.txt
 
-      # - name: Upload AKS Terraform Output
-      #   # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: aks
-      #     path: ./env/base-cluster/aks_name.txt
-
   docker:
     needs: terraform
     runs-on: ubuntu-latest
@@ -133,8 +126,8 @@ jobs:
       - uses: Azure/aks-set-context@v1
         with:
           creds: "${{ secrets.AZURE_CREDENTIALS }}" # Azure credentials
-          resource-group: "$AKS_RG"
-          cluster-name: "$AKS"
+          resource-group: $AKS_RG
+          cluster-name: $AKS
 
       # Deploy manifests to cluster
       - uses: Azure/k8s-deploy@v1
