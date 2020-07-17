@@ -70,7 +70,6 @@ jobs:
         working-directory: ./env/base-cluster
 
       - name: Upload Terraform Output
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         uses: actions/upload-artifact@v2
         with:
           name: drop
