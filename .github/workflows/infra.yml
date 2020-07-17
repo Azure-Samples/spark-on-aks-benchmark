@@ -63,7 +63,7 @@ jobs:
         # Output Terraform apply outputs to text files and uplaod as artifacts
       - name: Upload Outputs
         id: upload
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
           echo "$(terraform output acr_name)" > acr_name.txt
           echo "$(terraform output aks_name)" > aks_name.txt
