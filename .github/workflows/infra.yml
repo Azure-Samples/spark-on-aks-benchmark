@@ -61,8 +61,12 @@ jobs:
         working-directory: ./env/base-cluster
 
         # Output Terraform apply outputs to text files and uplaod as artifacts
-      - run: echo "$(terraform output acr_name)" > acr_name.txt
-      - run: echo "$(terraform output aks_name)" > aks_name.txt
+      - name: Upload Outputs
+        id: upload
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          echo "$(terraform output acr_name)" > acr_name.txt
+          echo "$(terraform output aks_name)" > aks_name.txt
 
       - name: Upload ACR Terraform Output
         uses: actions/upload-artifact@v1
@@ -94,15 +98,17 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: acr
-      - run: |
+
+      - name: Set Variable
+        run: |
           ACR=`cat acr_name.txt`
 
-      - name: "Login via Azure CLI"
+      - name: Login via Azure CLI
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: "Build image"
+      - name: Build Image
         uses: azure/docker-login@v1
         with:
           login-server: $ACR
