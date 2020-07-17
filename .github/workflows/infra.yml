@@ -106,7 +106,7 @@ jobs:
 
       - name: Set Variable
         run: |
-          ACR=`cat acr/acr_name.txt`
+          ACR=$(cat acr/acr_name.txt)
           echo $ACR
 
       - name: Login via Azure CLI
