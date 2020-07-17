@@ -100,12 +100,12 @@ jobs:
 
       - name: Docker Build
         run: |
-          docker build ./spark/ -t ${{ env.ACR }}/spark-on-aks:${{ github.sha }} -t ${{ env.ACR }}/spark-on-aks:stable
+          docker build ./spark/ -t ${{ env.ACR }}.azurecr.io/spark-on-aks:${{ github.sha }} -t ${{ env.ACR }}/spark-on-aks:stable
 
       - name: Docker push
         # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
-          docker push ${{ env.ACR }}/spark-on-aks:${{ github.sha }}
+          docker push ${{ env.ACR }}.azurecr.io/spark-on-aks:${{ github.sha }}
 
   aks:
     needs: docker
