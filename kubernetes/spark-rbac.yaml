@@ -1,0 +1,49 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: spark-on-k8s-Role
+  namespace: spark
+rules:
+  -
+    apiGroups:
+      - ""
+      - apps
+      - autoscaling
+      - batch
+      - extensions
+      - policy
+      - rbac.authorization.k8s.io
+    resources:
+        - pods/portforward
+        - pods
+        - persistentvolumes
+        - persistentvolumeclaims
+        - configmaps
+        - services
+        - serviceaccount
+    verbs: ["get", "list", "watch", "create", "delete"]
+  -
+    apiGroups:
+      - ""
+    resources:
+        - resourcequotas
+    verbs: ["get", "list", "describe"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: spark-on-k8s-RoleBinding
+  namespace: spark
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: spark-on-k8s-Role
+subjects:
+- kind: ServiceAccount
+  name: spark-on-k8s-sa
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spark-on-k8s-sa
+  namespace: spark
