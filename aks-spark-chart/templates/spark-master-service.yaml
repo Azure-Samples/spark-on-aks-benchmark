@@ -1,0 +1,30 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: spark-master-headless
+  namespace: spark
+  labels:
+    app: spark
+spec:
+  ports:
+  clusterIP: None
+  selector:
+    component: spark-master
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: spark-master
+  namespace: spark
+  labels:
+    app: spark
+spec:
+  ports:
+    - port: 7077
+      targetPort: 7077
+      name: spark
+    - port: 8080
+      targetPort: 8080
+      name: http
+  selector:
+    component: spark-master
