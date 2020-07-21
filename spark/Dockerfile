@@ -8,11 +8,13 @@ FROM openjdk:9-jre-slim
 ENV HADOOP_VERSION 3.2.0
 ENV HADOOP_SHORT_VERSION 3.2
 ENV SPARK_VERSION 3.0.0
+ENV OPENSSL_VERSION 1.1.0
 ENV SPARK_HOME=/opt/spark
 ENV PATH=$PATH:$SPARK_HOME/bin
 ENV HADOOP_HOME=/opt/hadoop
 ENV PATH=$PATH:$HADOOP_HOME/bin
 ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native
+ENV HADOOP_OPTIONAL_TOOLS="hadoop-azure,hadoop-azure-datalake"
 
 # Update Environment
 RUN set -ex && \
@@ -46,6 +48,15 @@ RUN mkdir -p /opt && \
     ln -s spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION} spark && \
     echo Spark ${SPARK_VERSION} installed in /opt && \
     chmod g+w /opt/spark
+
+# Download and install Hadoop Azure library
+RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure/${HADOOP_VERSION}/hadoop-azure-${HADOOP_VERSION}.jar -o /opt/spark/jars/hadoop-azure-${HADOOP_VERSION}.jar
+RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure-datalake/${HADOOP_VERSION}/hadoop-azure-datalake-${HADOOP_VERSION}.jar -o /opt/spark/jars/hadoop-azure-datalake-${HADOOP_VERSION}.jar
+
+
+# Download and install OpenSSL library
+RUN curl https://repo1.maven.org/maven2/org/wildfly/openssl/wildfly-openssl/${OPENSSL_VERSION}.Final/wildfly-openssl-${OPENSSL_VERSION}.Final.jar -o /opt/spark/jars/wildfly-openssl-${OPENSSL_VERSION}.Final.jar
+
 
 # add scripts and update spark default config
 ADD start-common.sh common.sh start-master start-worker /opt/
