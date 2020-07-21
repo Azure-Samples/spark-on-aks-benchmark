@@ -14,6 +14,7 @@ ENV PATH=$PATH:$SPARK_HOME/bin
 ENV HADOOP_HOME=/opt/hadoop
 ENV PATH=$PATH:$HADOOP_HOME/bin
 ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native
+ENV HADOOP_OPTIONAL_TOOLS="hadoop-azure,hadoop-azure-datalake"
 
 # Update Environment
 RUN set -ex && \
