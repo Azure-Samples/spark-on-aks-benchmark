@@ -9,7 +9,7 @@ description: "Add 150 character max description"
 urlFragment: "update-this-to-unique-url-stub"
 ---
 
-# Official Microsoft Sample
+# Spark on Azure Kubernetes Service
 
 <!--
 Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
@@ -19,22 +19,21 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-This project tests Azure Spark performance on AKS. The goal is to optimize
+This is to benchmark Apache Spark performance on Azure Kubernetes Service (AKS).
 
 ## Build Status
 
-| Pipeline   | Status                                                                                                  |
-| ---------- | ------------------------------------------------------------------------------------------------------- |
-| Terraform  | ![Terraform](https://github.com/Azure/spark-on-aks/workflows/Terraform/badge.svg)                       |
-| Docker     | ![Spark Docker Image](https://github.com/Azure/spark-on-aks/workflows/Spark%20Docker%20Image/badge.svg) |
-| Kubernetes | ![Kubernetes](https://github.com/Azure/spark-on-aks/workflows/Kubernetes/badge.svg)                     |
+| Status                                                                            |
+| --------------------------------------------------------------------------------- |
+| ![Terraform](https://github.com/Azure/spark-on-aks/workflows/Terraform/badge.svg) |
 
 ## Contents
 
 | File/folder       | Description                                |
 | ----------------- | ------------------------------------------ |
 | `env`             | Terraform to build environment             |
-| `src`             | Sample source code.                        |
+| `kuberentes`      | Kubernetes manifests                       |
+| `spark`           | Spark Docker containers and config         |
 | `.gitignore`      | Define what to ignore at commit time.      |
 | `CHANGELOG.md`    | List of changes to the sample.             |
 | `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
@@ -43,11 +42,21 @@ This project tests Azure Spark performance on AKS. The goal is to optimize
 
 ## Prerequisites
 
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
+This project requires the user to have access to the following:
+
+- An Azure AAD Tenant and the ability to create AAD Applications
+- An Azure Subscription
+
+This project also requires a development environment with the following tools installed
+
+- [Terraform](https://learn.hashicorp.com/terraform/getting-started/install)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 ## Setup
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
+[Deploy the Environment](env/Readme.md)
+[Build and Deploy Dockerfiles](spark/Readme.md)
+[Apply Kubernetes configuration](kubernetes/Readme.md)
 
 ## Running the sample
 
