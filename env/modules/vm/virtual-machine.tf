@@ -42,3 +42,21 @@ resource "azurerm_network_interface" "nic" {
 
   tags = var.tags
 }
+
+resource "azurerm_virtual_machine_extension" "extension" {
+  name = "config"
+  virtual_machine_id = azurerm_linux_virtual_machine.vm.id
+  publisher = "Microsoft.Azure.Extensions"
+  type = "CustomScript"
+  type_handler_version = "2.1"
+
+  settings = <<SETTINGS
+    {
+        "script": "${base64encode(templatefile("../modules/vm/config.sh", {
+          vmname="${azurerm_linux_virtual_machine.vm.name}"
+        }))}"
+    }
+SETTINGS
+  depends_on = [azurerm_linux_virtual_machine.vm]
+  tags = var.tags
+}
