@@ -1,0 +1,7 @@
+proxy:
+  secretToken: ""
+
+singleuser:
+  image:
+    name: jupyter/all-spark-notebook
+  defaultUrl: "/lab"
