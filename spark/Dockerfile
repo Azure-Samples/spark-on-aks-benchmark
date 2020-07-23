@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 
 # Base Image
-FROM openjdk:9-jre-slim
+FROM openjdk:8-jre-slim
 
 # Define Spark and Hadoop Verson
 ENV HADOOP_VERSION 3.2.0
