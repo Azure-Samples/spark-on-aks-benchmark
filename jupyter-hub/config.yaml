@@ -1,0 +1,6 @@
+proxy:
+  secretToken: ""
+singleuser:
+  image:
+    name: jupyter/all-spark-notebook
+    tag: latest
