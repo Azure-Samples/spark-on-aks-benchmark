@@ -17,10 +17,12 @@ tar xvf apache-maven-3.6.3-bin.tar.gz
 export PATH=/opt/apache-maven-3.6.3./bin:$PATH
 
 # Install Java
-curl -O https://repos.azul.com/azure-only/zulu/packages/zulu-11/11.0.3/zulu-11-azure-jdk_11.31.11-11.0.3-linux_x64.tar.gz
+#curl -O https://repos.azul.com/azure-only/zulu/packages/zulu-11/11.0.3/zulu-11-azure-jdk_11.31.11-11.0.3-linux_x64.tar.gz
+#tar xvf zulu-11-azure-jdk_11.31.11-11.0.3-linux_x64.tar.gz
 
-tar xvf zulu-11-azure-jdk_11.31.11-11.0.3-linux_x64.tar.gz
-
+sudo apt install openjdk-8-jre -y
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64  
+echo "Java installed"
 
 # Install Scala Build Tool
 echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
@@ -32,7 +34,7 @@ sudo apt-get install sbt
 git clone -b branch-2.4 https://github.com/apache/spark
 cd spark
 sparkdir=$(pwd)
-export JAVA_HOME=`/usr/libexec/java_home -d 64 -v "1.8*"`
+#export JAVA_HOME=`/usr/libexec/java_home -d 64 -v "1.8*"`
 ./build/mvn -Pkubernetes -DskipTests clean package
 
 exit 0
