@@ -24,3 +24,21 @@ module "producer_vm" {
   public_key          = var.public_key
   tags                = local.tags
 }
+
+resource "azurerm_managed_disk" "data" {
+  name = "data"
+  location = local.location
+  resource_group_name = azurerm_resource_group.rg.name
+  storage_account_type = "Standard_LRS"
+  create_option = "Empty"
+  disk_size_gb = "2000"
+
+  tags = local.tags
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "attach" {
+  managed_disk_id = azurerm_managed_disk.data.id
+  virtual_machine_id = module.producer_vm.id
+  lun = "10"
+  caching = "ReadWrite"
+}
