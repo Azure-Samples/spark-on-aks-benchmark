@@ -1,6 +1,7 @@
 proxy:
-  secretToken: ""
+  secretToken: "d62cb62fa64bd24576d36b6327ca79699809993d7643f8f1f101c1dea522c72a"
 singleuser:
   image:
     name: jupyter/all-spark-notebook
     tag: latest
+  defaultUrl: "/lab"

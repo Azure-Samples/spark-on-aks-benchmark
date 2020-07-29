@@ -5,7 +5,7 @@ metadata:
   labels:
     app: spark
 spec:
-  privileged: false
+  privileged: true
   seLinux:
     rule: RunAsAny
   supplementalGroups:

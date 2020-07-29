@@ -1,11 +1,11 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: psp-deny-privileged-clusterrolebinding
+  name: psp-allow-privileged-clusterrolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: psp-deny-privileged-clusterrole
+  name: psp-allow-privileged-clusterrole
 subjects:
 - apiGroup: rbac.authorization.k8s.io
   kind: Group

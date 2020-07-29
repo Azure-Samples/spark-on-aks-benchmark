@@ -1,11 +1,11 @@
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-  name: psp-deny-privileged
+  name: psp-allow-privileged
   labels:
     app: spark
 spec:
-  privileged: false
+  privileged: true
   seLinux:
     rule: RunAsAny
   supplementalGroups:

@@ -1,7 +1,7 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: psp-deny-privileged-clusterrole
+  name: psp-allow-privileged-clusterrole
   labels:
     app: spark
 rules:
@@ -10,6 +10,6 @@ rules:
   resources:
   - podsecuritypolicies
   resourceNames:
-  - psp-deny-privileged
+  - psp-allow-privileged
   verbs:
   - use
