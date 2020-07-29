@@ -4,6 +4,13 @@ echo "This vm name is: ${vmname}"
 # Azure Azure CLI
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
+# Install AzCopy
+curl -O curl -O https://azcopyvnext.azureedge.net/release20200724/azcopy_linux_amd64_10.5.1.tar.gz
+tar xvf azcopy_linux_amd64_10.5.1.tar.gz
+mv azcopy_linux_amd64_10.5.1/azcopy /usr/bin
+rm -rf azcopy_linux_amd64_10.5.1
+rm azcopy_linux_amd64_10.5.1.tar.gz
+
 # Add Kubectl
 sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -21,7 +28,7 @@ export PATH=/opt/apache-maven-3.6.3./bin:$PATH
 #tar xvf zulu-11-azure-jdk_11.31.11-11.0.3-linux_x64.tar.gz
 
 sudo apt install openjdk-8-jre -y
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64  
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 echo "Java installed"
 
 # Install Scala Build Tool
