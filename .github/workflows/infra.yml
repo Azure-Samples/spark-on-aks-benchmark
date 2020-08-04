@@ -176,7 +176,7 @@ jobs:
       - name: 'Deploy Helm Charts'
         id: helm-spark
         run: |
-          helm upgrade --install spark aks-spark-chart --set acr=${{ steps.vars.outputs.ACR }
+          helm upgrade --install spark aks-spark-chart --set acr=${{ steps.vars.outputs.ACR }}
 
           helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
           helm repo update
