@@ -143,6 +143,8 @@ jobs:
         run: |
           echo ::set-output name=AKS::$(cat drop/aks_name.txt)
           echo ::set-output name=AKS_RG::$(cat drop/rg_name.txt)
+          echo ::set-output name=ACR::$(cat drop/acr_name.txt)
+
 
       # Set the target AKS cluster.
       - uses: Azure/aks-set-context@v1
@@ -152,14 +154,32 @@ jobs:
           cluster-name: ${{ steps.vars.outputs.AKS }}
 
       # Deploy manifests to cluster
-      - uses: Azure/k8s-deploy@v1
+      # - uses: Azure/k8s-deploy@v1
+      #   with:
+      #     namespace: spark
+      #     manifests: |
+      #       kubernetes/psp-deny-privileged.yaml
+      #       kubernetes/psp-deny-privileged-clusterrole.yaml
+      #       kubernetes/psp-deny-privileged-clusterrolebinding.yaml
+      #       kubernetes/spark-namespace.yaml
+      #       kubernetes/spark-master-service.yaml
+      #       kubernetes/spark-master-controller.yaml
+      #       kubernetes/spark-worker-controller.yaml
+
+      # Deploy environment via Helm
+      - name: 'Install Helm'
+        uses: azure/setup-helm@v1
         with:
-          namespace: spark
-          manifests: |
-            kubernetes/psp-deny-privileged.yaml
-            kubernetes/psp-deny-privileged-clusterrole.yaml
-            kubernetes/psp-deny-privileged-clusterrolebinding.yaml
-            kubernetes/spark-namespace.yaml
-            kubernetes/spark-master-service.yaml
-            kubernetes/spark-master-controller.yaml
-            kubernetes/spark-worker-controller.yaml
+          version: latest
+        id: 'install'
+
+      - name: 'Deploy Helm Charts'
+        id: helm-spark
+        run: |
+          helm upgrade --install spark aks-spark-chart --set acr=${{ steps.vars.outputs.ACR }
+
+          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+          helm repo update
+          helm upgrade --install jhub jupyterhub/jupyterhub --namespace spark --values jupyter-hub/config.yaml --set proxy.secretToken=${{ secrets.JUPYTER_TOKEN }} --set auth.github.clientId=${{ secrets.JUPYTER_GH_CLIENTID }} --set auth.github.clientSecret=${{ secrets.JUPYTER_GH_CLIENT_SECRET }} --set auth.github.callbackUrl=http://20.42.147.166/hub/oauth_callback
+
+        # The callback URL will need to be manually adjusted until we can get it dynamically assigned via a fqdn
