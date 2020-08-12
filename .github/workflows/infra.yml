@@ -178,8 +178,9 @@ jobs:
         run: |
           helm upgrade --install spark aks-spark-chart --set acr=${{ steps.vars.outputs.ACR }}
 
-          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-          helm repo update
-          helm upgrade --install jhub jupyterhub/jupyterhub --namespace spark --values jupyter-hub/config.yaml --set proxy.secretToken=${{ secrets.JUPYTER_TOKEN }} --set auth.github.clientId=${{ secrets.JUPYTER_GH_CLIENTID }} --set auth.github.clientSecret=${{ secrets.JUPYTER_GH_CLIENT_SECRET }} --set auth.github.callbackUrl=http://20.42.147.166/hub/oauth_callback
+        # When this is ready to be re-added it will need to be indented inline with the above helm command.
+        # helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+        # helm repo update
+        # helm upgrade --install jhub jupyterhub/jupyterhub --namespace spark --values jupyter-hub/config.yaml --set proxy.secretToken=${{ secrets.JUPYTER_TOKEN }} --set auth.github.clientId=${{ secrets.JUPYTER_GH_CLIENTID }} --set auth.github.clientSecret=${{ secrets.JUPYTER_GH_CLIENT_SECRET }} --set auth.github.callbackUrl=http://20.42.147.166/hub/oauth_callback
 
         # The callback URL will need to be manually adjusted until we can get it dynamically assigned via a fqdn
