@@ -12,8 +12,10 @@ wget https://archive.apache.org/dist/spark/spark-3.0.0/spark-3.0.0-bin-hadoop3.2
 tar xvf spark-3.0.0-bin-hadoop3.2.tgz
 rm spark-3.0.0-bin-hadoop3.2.tgz
 
-cd spark-3.0.0-bin-hadoop3.2/bin
-./docker-image-tool.sh -t $SPARK_VERSION -b java_image_tag=${JAVA_IMAGE_TAG} build
 
-cd $SCRIPT_ROOT
-rm -r ${SPARK_BASE}
+
+# cd spark-3.0.0-bin-hadoop3.2/bin
+# ./docker-image-tool.sh -t $SPARK_VERSION -b java_image_tag=${JAVA_IMAGE_TAG} build
+
+# cd $SCRIPT_ROOT
+# rm -r ${SPARK_BASE}
