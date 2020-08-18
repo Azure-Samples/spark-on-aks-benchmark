@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+<property> 
+        <name>fs.azure.account.auth.type.jamesposparkdata.dfs.core.windows.net</name>
+        <value>SharedKey</value>
+        <description>  </description>
+</property>
+<property> 
+        <name>fs.azure.account.key.jamesposparkdata.dfs.core.windows.net</name>
+        <value>this is your primary key</value> 
+        <description> The secret password. Never share these.  </description>
+</property>
+
+</configuration>

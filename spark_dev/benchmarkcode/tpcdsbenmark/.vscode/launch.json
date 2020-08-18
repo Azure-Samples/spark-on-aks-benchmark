@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "scala",
+            "request": "launch",
+            "name": "Benchmark",
+            "mainClass": "com.microsoftazure.aks.tpcds.DataGenerator.TPCDSBenchmark",
+            "args": ["/opt/app/spark_dev/benchmarkcode/tpcds_data", "/opt/app/spark_dev/benchmarkcode/results","/opt/tpcds-kit/tools"],
+            "jvmOptions": []
+        },
+        {
+            "type": "scala",
+            "request": "launch",
+            "name": "Data generation",
+            "mainClass": "com.microsoftazure.aks.tpcds.DataGenerator",
+            "args": ["/opt/app/spark_dev/benchmarkcode/tpcds_data", "/opt/tpcds-kit/tools"],
+            "jvmOptions": []
+        }
+
+    ]
+}
