@@ -1,12 +1,17 @@
-FROM spark:3.0.0d
+
+
+ARG TAG=spark:3_base
+FROM $TAG
+
+ENV HADOOP_OPTIONAL_TOOLS=hadoop-azure
 
 RUN apt update
 
 # imnstall some tools
 RUN apt-get install -y vim tmux bash git 
     
-## needed for start-master.sh (spark), curl to validate web portal is available, procps for ps
-RUN apt-get install -y procps curl
+## needed for start-master.sh (spark), curl to validate web portal is available, procps for ps (start-master.sh and start-slave.sh dependencies)
+RUN apt-get install -y procps curl wget
 
 # build benchmark dependencies
 
@@ -46,7 +51,3 @@ RUN cd /opt/spark-sql-perf
 COPY entrypoint.sh /opt/entrypoint.sh
 COPY start-spark.sh start-spark.sh
 ENTRYPOINT [ "/opt/entrypoint.sh" ]
-
-#EXPOSE 8080
-#EXPOSE 8081
-#EXPOSE 4040

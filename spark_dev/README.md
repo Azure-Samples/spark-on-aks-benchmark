@@ -14,7 +14,7 @@ Folder with benchmark code.  Data generation and benchmark execution have been v
 
 - [x] Verify data geneation on the local spark cluster (1GB data set)
 - [x] Verify benchmark execution on the local spark cluster (1GB data set)
-- [ ] Verify benchmark execution on a local kurbernetes cluster (1GB data set)
+- [x] Verify benchmark execution on a local kurbernetes cluster (1GB data set)
 - [x] Generate 1GB data in Azure with an ABFS file system (can be an Azure VM), follow up on outcome
 - [ ] Verify benchmark execution in Azure with an ABFS file system (can be an Azure VM)
 - [?] Generate 1GB data in an Azure AKS clustser with ABFS file system
