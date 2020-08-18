@@ -38,7 +38,7 @@ sudo apt-get update
 sudo apt-get install sbt
 
 # Build the Spark Source
-git clone -b branch-2.4 https://github.com/apache/spark
+git clone -b branch-3.0 https://github.com/apache/spark
 cd spark
 sparkdir=$(pwd)
 #export JAVA_HOME=`/usr/libexec/java_home -d 64 -v "1.8*"`

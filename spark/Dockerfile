@@ -58,9 +58,21 @@ RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure-datalake/
 RUN curl https://repo1.maven.org/maven2/org/wildfly/openssl/wildfly-openssl/${OPENSSL_VERSION}.Final/wildfly-openssl-${OPENSSL_VERSION}.Final.jar -o /opt/spark/jars/wildfly-openssl-${OPENSSL_VERSION}.Final.jar
 
 
+# add benchmark code 
+
+ADD spark_dev/spark_tpcds/tpcds_jars /opt/spark/jars
+
+RUN mkdir /opt/tpcds-kit/
+RUN mkdir /opt/tpcds-kit/tools
+
+ADD spark_dev/spark_tpcds/tpcds-kit/tools /opt/tpcds-kit/tools
+
+
 # add scripts and update spark default config
 ADD start-common.sh common.sh start-master start-worker /opt/
 ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
 ADD core-site.xml /opt/spark/conf/core-site.xml
 ENV PATH $PATH:/opt/spark/bin
 RUN chmod +x /opt/start-common.sh /opt/start-master /opt/start-worker
+
+#
