@@ -2,7 +2,6 @@
 # Licensed under the MIT license.
 
 # Base Image
-#FROM openjdk:8-jre-slim
 ARG TAG=sparkacrbacf.azurecr.io/spark:spark
 FROM $TAG
 
