@@ -2,8 +2,7 @@
 # Licensed under the MIT license.
 
 # Base Image
-ARG TAG=sparkacrbacf.azurecr.io/spark:spark
-FROM $TAG
+FROM java:openjdk-8-jdk
 
 # Define Spark and Hadoop Verson
 ENV HADOOP_VERSION 3.2.0
@@ -17,18 +16,6 @@ ENV PATH=$PATH:$HADOOP_HOME/bin
 ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native
 ENV HADOOP_OPTIONAL_TOOLS="hadoop-azure,hadoop-azure-datalake"
 
-# Update Environment
-#RUN set -ex && \
-#    sed -i 's/http:/https:/g' /etc/apt/sources.list && \
-#    apt-get update && \
-#    ln -s /lib /lib64 && \
-#    apt-get upgrade -y && \
-#    apt install -y bash tini libc6 libpam-modules krb5-user libnss3 curl && \
-#    rm /bin/sh && \
-#    ln -sv /bin/bash /bin/sh && \
-#    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
-#    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
-#    rm -rf /var/cache/apt/*
 
 # Download and install haddop
 RUN mkdir -p /opt && \
@@ -41,14 +28,14 @@ RUN mkdir -p /opt && \
 
 
 # Download and install spark
-#RUN mkdir -p /opt && \
-#    cd /opt && \
-#    curl -O http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
-#    tar -zxf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
-#    rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
-#    ln -s spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION} spark && \
-#    echo Spark ${SPARK_VERSION} installed in /opt && \
-#    chmod g+w /opt/spark
+RUN mkdir -p /opt && \
+    cd /opt && \
+    curl -O http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
+    tar -zxf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
+    rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION}.tgz && \
+    ln -s spark-${SPARK_VERSION}-bin-hadoop${HADOOP_SHORT_VERSION} spark && \
+    echo Spark ${SPARK_VERSION} installed in /opt && \
+    chmod g+w /opt/spark
 
 # Download and install Hadoop Azure library
 RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure/${HADOOP_VERSION}/hadoop-azure-${HADOOP_VERSION}.jar -o /opt/spark/jars/hadoop-azure-${HADOOP_VERSION}.jar
@@ -74,4 +61,7 @@ ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
 ADD core-site.xml /opt/spark/conf/core-site.xml
 ENV PATH $PATH:/opt/spark/bin
 RUN chmod +x /opt/start-common.sh /opt/start-master /opt/start-worker
+
+COPY entrypoint.sh /opt/entrypoint.sh
+COPY start-spark.sh start-spark.sh
 ENTRYPOINT [ "/opt/entrypoint.sh" ]
