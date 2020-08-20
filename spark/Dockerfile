@@ -3,6 +3,8 @@
 
 # Base Image
 FROM openjdk:8-jre-slim
+ARG TAG=spark:sparkacrbacf.azurecr.io/spark:base
+FROM $TAG
 
 # Define Spark and Hadoop Verson
 ENV HADOOP_VERSION 3.2.0
@@ -17,17 +19,17 @@ ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native
 ENV HADOOP_OPTIONAL_TOOLS="hadoop-azure,hadoop-azure-datalake"
 
 # Update Environment
-RUN set -ex && \
-    sed -i 's/http:/https:/g' /etc/apt/sources.list && \
-    apt-get update && \
-    ln -s /lib /lib64 && \
-    apt-get upgrade -y && \
-    apt install -y bash tini libc6 libpam-modules krb5-user libnss3 curl && \
-    rm /bin/sh && \
-    ln -sv /bin/bash /bin/sh && \
-    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
-    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
-    rm -rf /var/cache/apt/*
+#RUN set -ex && \
+#    sed -i 's/http:/https:/g' /etc/apt/sources.list && \
+#    apt-get update && \
+#    ln -s /lib /lib64 && \
+#    apt-get upgrade -y && \
+#    apt install -y bash tini libc6 libpam-modules krb5-user libnss3 curl && \
+#    rm /bin/sh && \
+#    ln -sv /bin/bash /bin/sh && \
+#    echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
+#    chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
+#    rm -rf /var/cache/apt/*
 
 # Download and install haddop
 RUN mkdir -p /opt && \
