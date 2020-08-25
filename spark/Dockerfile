@@ -16,8 +16,6 @@ ENV PATH=$PATH:$HADOOP_HOME/bin
 ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native
 ENV HADOOP_OPTIONAL_TOOLS="hadoop-azure,hadoop-azure-datalake"
 
-EXPOSE 4040/tcp
-
 # Update Environment
 RUN set -ex && \
     sed -i 's/http:/https:/g' /etc/apt/sources.list && \
