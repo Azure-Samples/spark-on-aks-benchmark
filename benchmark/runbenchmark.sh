@@ -32,19 +32,34 @@ read -p "Enter Shared Key : " $key
 #    val filterQueries = Try(args(7).toString).getOrElse("")
 #    val onlyWarn = Try(args(8).toBoolean).getOrElse(false)
 
-./spark-submit \
+../bin/spark-submit \
         --master k8s://https://default-sparkonaks-k8s-79607165.hcp.westus2.azmk8s.io:443 \
         --deploy-mode cluster \
         --class com.microsoftazure.aks.tpcds.TPCDSBenchmark \
-        --conf spark.executor.instances=2\
+        --conf spark.executor.instances=10 \
+        --conf spark.driver.cores=4 \
+        --conf spark.executor.cores=2 \
+        --conf spark.executor.memory=8000m \
+        --conf spark.driver.memory=8000m \
+        --conf spark.speculation=false \
+        --conf spark.speculation.multiplier=3 \
+        --conf spark.speculation.quantile=0.9 \
+        --conf spark.sql.broadcastTimeout=7200 \
+        --conf spark.sql.crossJoin.enabled=true \
+        --conf spark.sql.parquet.mergeSchema=false \
+        --conf spark.sql.parquet.filterPushdown=true \
         --conf spark.app.name=tpcds \
-        --conf spark.kubernetes.container.image=sparkacrbacf.azurecr.io/spark:stable \
-        --conf spark.kubernetes.namespaces=spark \
+        --conf spark.kubernetes.container.image=sparkacrbacf.azurecr.io/spark:prod1 \
         --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
         --conf spark.authenticate=false \
+        --conf spark.kubernetes.node.selector.app=spark \
         --conf spark.kubernetes.container.image.pullPolicy=Always \
         --conf spark.kubernetes.file.upload.path=/opt/spark/work-dir \
+        --conf spark.kubernetes.appKillPodDeletionGracePeriod=30 \
         --conf spark.hadoop.fs.azure.account.auth.type.sparkonakstpcdsdataset.dfs.core.windows.net=SharedKey \
-        --conf spark.hadoop.fs.azure.account.key.sparkonakstpcdsdataset.dfs.core.windows.net=$key\
-         "local:///opt/spark/jars/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar" "abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/data" "abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/results" "/opt/tpcds-kit/tools"
+        --conf spark.hadoop.fs.azure.account.key.sparkonakstpcdsdataset.dfs.core.windows.net=$key \
+         "local:///opt/spark/jars/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar" \
+         "abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/data" \
+         "abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/results" \
+         "/opt/tpcds-kit/tools" parquet 1000 1 false q70-v2.4,q71-v2.4
 
