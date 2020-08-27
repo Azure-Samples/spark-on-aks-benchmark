@@ -36,6 +36,5 @@ read -p "Enter Shared Key : " $key
         --conf spark.kubernetes.file.upload.path=/opt/spark/work-dir \
         --conf spark.hadoop.fs.azure.account.auth.type.sparkonakstpcdsdataset.dfs.core.windows.net=SharedKey \
         --conf spark.hadoop.fs.azure.account.key.sparkonakstpcdsdataset.dfs.core.windows.net=$key \
-        --conf spark.hadoop.fs.azure.account.key.sparkonakstpcdsdataset.dfs.core.windows.net=***REMOVED*** \
          "local:///opt/spark/jars/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar" "abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/data" "/opt/tpcds-kit/tools" "parquet" "1000"
 
