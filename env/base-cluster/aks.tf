@@ -7,25 +7,10 @@ module "aks" {
   name                = local.name
   location            = local.location
   resource_group_name = azurerm_resource_group.rg.name
-  vm_size             = "Standard_D4s_v3"
+  vm_size             = local.spark_cluster_vm_size
   log_analytics_id    = module.log_analytics.id
   vnet_subnet_id      = module.aks_subnet.id
-
-  tags = local.tags
-}
-
-module "spark_node_pool" {
-  source = "../modules/aks-node-pool"
-
-  name           = "spark"
-  aks_cluster_id = module.aks.id
-  vm_size        = local.spark_cluster_vm_size
-  node_count     = local.spark_aks_pool_size
-  vnet_subnet_id = module.aks_subnet.id
-  node_labels = {
-    "app" : "spark",
-  }
-
+  node_count = local.spark_aks_pool_size
   tags = local.tags
 }
 

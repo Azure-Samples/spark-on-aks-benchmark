@@ -13,6 +13,9 @@ variable "resource_group_name" {
 variable "vm_size" {
   type = string
 }
+variable "node_count" {
+  type = number
+}
 variable "log_analytics_id" {
   type = string
 }
