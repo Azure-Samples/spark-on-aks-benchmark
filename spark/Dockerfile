@@ -70,7 +70,9 @@ RUN mkdir /opt/tpcds-kit/tools
 #Spark work directory
 RUN mkdir /opt/spark/work-dir 
 
-ADD tpcds-kit/tools /opt/tpcds-kit/tools
+ADD tpcds-kit /opt/tpcds-kit
+
+#ADD tpcds-kit/tools /opt/tpcds-kit/tools
 RUN chmod +x /opt/tpcds-kit/tools/checksum /opt/tpcds-kit/tools/dsdgen /opt/tpcds-kit/tools/dsqgen /opt/tpcds-kit/tools/mkheader
 RUN chmod +x /opt/tpcds-kit/tools/distcomp
 
