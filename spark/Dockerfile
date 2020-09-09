@@ -60,7 +60,7 @@ RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure-datalake/
 # Download and install OpenSSL library
 RUN curl https://repo1.maven.org/maven2/org/wildfly/openssl/wildfly-openssl/${OPENSSL_VERSION}.Final/wildfly-openssl-${OPENSSL_VERSION}.Final.jar -o /opt/spark/jars/wildfly-openssl-${OPENSSL_VERSION}.Final.jar
 
-# add benchmark code 
+
 ADD tpcds_jars /opt/spark/jars
 
 # add TPCDS code
@@ -68,11 +68,14 @@ RUN mkdir /opt/tpcds-kit/
 RUN mkdir /opt/tpcds-kit/tools
 
 #Spark work directory
+
 RUN mkdir /opt/spark/work-dir 
 
 ADD tpcds-kit /opt/tpcds-kit
 
 #ADD tpcds-kit/tools /opt/tpcds-kit/tools
+
+
 RUN chmod +x /opt/tpcds-kit/tools/checksum /opt/tpcds-kit/tools/dsdgen /opt/tpcds-kit/tools/dsqgen /opt/tpcds-kit/tools/mkheader
 RUN chmod +x /opt/tpcds-kit/tools/distcomp
 

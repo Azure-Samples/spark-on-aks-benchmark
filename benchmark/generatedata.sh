@@ -19,8 +19,7 @@ echo $BENCHMARK
 
 read -p "Enter Shared Key : " $key
 
-
-/home/yash/spark/bin/spark-submit \
+./bin/spark-submit \
         --master k8s://https://default-sparkonaks-k8s-79607165.hcp.westus2.azmk8s.io:443 \
         --deploy-mode cluster \
         --class com.microsoftazure.aks.tpcds.DataGenerator \

@@ -32,7 +32,8 @@ read -p "Enter Shared Key : " $key
 #    val filterQueries = Try(args(7).toString).getOrElse("")
 #    val onlyWarn = Try(args(8).toBoolean).getOrElse(false)
 
-../bin/spark-submit \
+
+./bin/spark-submit \
         --master k8s://https://default-sparkonaks-k8s-79607165.hcp.westus2.azmk8s.io:443 \
         --deploy-mode cluster \
         --class com.microsoftazure.aks.tpcds.TPCDSBenchmark \
