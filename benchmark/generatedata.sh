@@ -18,6 +18,7 @@ echo $JARS
 echo $BENCHMARK
 
 read -p "Enter Shared Key : " $key
+
 ./bin/spark-submit \
         --master k8s://https://default-sparkonaks-k8s-79607165.hcp.westus2.azmk8s.io:443 \
         --deploy-mode cluster \
