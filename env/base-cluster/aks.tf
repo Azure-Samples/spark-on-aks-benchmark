@@ -36,7 +36,7 @@ resource "azurerm_container_registry" "acr" {
 resource "azurerm_role_assignment" "acr" {
   scope                = azurerm_container_registry.acr.id
   role_definition_name = "acrpull"
-  principal_id         = module.aks.aks_aad_object_id
+  principal_id         = module.aks.sp_principal_id
 
   depends_on = [
     azurerm_container_registry.acr,
