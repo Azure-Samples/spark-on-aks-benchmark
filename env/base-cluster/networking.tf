@@ -57,5 +57,5 @@ resource "azurerm_public_ip" "bastion" {
 resource "azurerm_role_assignment" "aks_sp_network" {
   scope                = module.vnet.id
   role_definition_name = "Network Contributor"
-  principal_id         = module.aks.aks_aad_object_id
+  principal_id         = module.aks.sp_principal_id
 }

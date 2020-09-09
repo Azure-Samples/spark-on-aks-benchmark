@@ -4,9 +4,11 @@
 output "id" {
   value = azurerm_kubernetes_cluster.aks.id
 }
-output "aks_aad_object_id" {
-  value = azuread_service_principal.aks_sp.object_id
-}
+
 output "name" {
   value = azurerm_kubernetes_cluster.aks.name
+}
+
+output "sp_principal_id" {
+  value = azurerm_kubernetes_cluster.aks.identity[0].principal_id
 }
