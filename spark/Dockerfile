@@ -26,7 +26,7 @@ RUN set -ex && \
     apt-get update && \
     ln -s /lib /lib64 && \
     apt-get upgrade -y && \
-    apt install -y bash tini libc6 libpam-modules krb5-user libnss3 curl && \
+    apt install -y bash tini libc6 libpam-modules krb5-user libnss3 curl gcc make flex bison byacc git && \
     rm /bin/sh && \
     ln -sv /bin/bash /bin/sh && \
     echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
@@ -63,21 +63,17 @@ RUN curl https://repo1.maven.org/maven2/org/wildfly/openssl/wildfly-openssl/${OP
 
 ADD tpcds_jars /opt/spark/jars
 
-# add TPCDS code
-RUN mkdir /opt/tpcds-kit/
-RUN mkdir /opt/tpcds-kit/tools
+# add TPCDS code 
+RUN git clone https://github.com/databricks/tpcds-kit.git && \
+    cd tpcds-kit/tools && \
+    make OS=LINUX
 
 #Spark work directory
 
 RUN mkdir /opt/spark/work-dir 
 
-ADD tpcds-kit /opt/tpcds-kit
-
-#ADD tpcds-kit/tools /opt/tpcds-kit/tools
-
-
-RUN chmod +x /opt/tpcds-kit/tools/checksum /opt/tpcds-kit/tools/dsdgen /opt/tpcds-kit/tools/dsqgen /opt/tpcds-kit/tools/mkheader
-RUN chmod +x /opt/tpcds-kit/tools/distcomp
+RUN chmod +x /opt/tpcds-kit/tools/checksum /opt/tpcds-kit/tools/dsdgen /opt/tpcds-kit/tools/dsqgen /opt/tpcds-kit/tools/mkheader && \
+    chmod +x /opt/tpcds-kit/tools/distcomp
 
 #ADD start-common.sh common.sh start-master start-worker /opt/
 #RUN chmod +x /opt/start-common.sh /opt/start-master /opt/start-worker
