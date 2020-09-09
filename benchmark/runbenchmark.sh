@@ -32,6 +32,7 @@ read -p "Enter Shared Key : " $key
 #    val filterQueries = Try(args(7).toString).getOrElse("")
 #    val onlyWarn = Try(args(8).toBoolean).getOrElse(false)
 
+
 ./bin/spark-submit \
         --master k8s://https://default-sparkonaks-k8s-79607165.hcp.westus2.azmk8s.io:443 \
         --deploy-mode cluster \
@@ -62,5 +63,4 @@ read -p "Enter Shared Key : " $key
          "abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/data" \
          "abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/results" \
          "/opt/tpcds-kit/tools" parquet 1000 1 false q70-v2.4,q71-v2.4
-
 
