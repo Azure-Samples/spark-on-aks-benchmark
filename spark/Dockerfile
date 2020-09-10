@@ -26,13 +26,14 @@ RUN set -ex && \
     apt-get update && \
     ln -s /lib /lib64 && \
     apt-get upgrade -y && \
-    apt-get install -q -y bash tini libc6 libpam-modules krb5-user libnss3 curl gcc make flex bison byacc git && \
+    apt-get install -q -y bash tini libc6 libpam-modules krb5-user libnss3 curl && \
     rm /bin/sh && \
     ln -sv /bin/bash /bin/sh && \
     echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
     chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
     rm -rf /var/cache/apt/*
 
+#gcc make flex bison byacc git
 
 # Download and install haddop
 RUN mkdir -p /opt && \
@@ -64,9 +65,11 @@ RUN curl https://repo1.maven.org/maven2/org/wildfly/openssl/wildfly-openssl/${OP
 ADD tpcds_jars /opt/spark/jars
 
 # add TPCDS code
-RUN git clone https://github.com/databricks/tpcds-kit.git && \
-    cd tpcds-kit/tools && \
-    make OS=LINUX
+#RUN git clone https://github.com/databricks/tpcds-kit.git && \
+#    cd tpcds-kit/tools && \
+#    make OS=LINUX
+
+ADD tpcds-kit /opt/tpcds-kit
 
 #Spark work directory
 
