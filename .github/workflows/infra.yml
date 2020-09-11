@@ -154,11 +154,11 @@ jobs:
           cluster-name: ${{ steps.vars.outputs.AKS }}
 
       # Deploy manifests to cluster
-      - uses: Azure/k8s-deploy@v1
-        with:
-          manifests: |
-            curl -L https://github.com/juan-lee/knode/releases/download/v0.1.3/knode-default.yaml | kubectl apply -f -
-            kubectl rollout status daemonset -n knode-system knode-daemon
+      - name: Move Docker to temp disk
+        id: docker_temp
+        run: |
+          curl -L https://github.com/juan-lee/knode/releases/download/v0.1.3/knode-default.yaml | kubectl apply -f -
+          kubectl rollout status daemonset -n knode-system knode-daemon
 
       # Deploy environment via Helm
       - name: 'Install Helm'
