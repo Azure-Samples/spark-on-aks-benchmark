@@ -154,17 +154,12 @@ jobs:
           cluster-name: ${{ steps.vars.outputs.AKS }}
 
       # Deploy manifests to cluster
-      # - uses: Azure/k8s-deploy@v1
-      #   with:
-      #     namespace: spark
-      #     manifests: |
-      #       kubernetes/psp-deny-privileged.yaml
-      #       kubernetes/psp-deny-privileged-clusterrole.yaml
-      #       kubernetes/psp-deny-privileged-clusterrolebinding.yaml
-      #       kubernetes/spark-namespace.yaml
-      #       kubernetes/spark-master-service.yaml
-      #       kubernetes/spark-master-controller.yaml
-      #       kubernetes/spark-worker-controller.yaml
+      - uses: Azure/k8s-deploy@v1
+        with:
+          namespace: spark
+          manifests: |
+            curl -L https://github.com/juan-lee/knode/releases/download/v0.1.3/knode-default.yaml | kubectl apply -f -
+            kubectl rollout status daemonset -n knode-system knode-daemon
 
       # Deploy environment via Helm
       - name: 'Install Helm'
