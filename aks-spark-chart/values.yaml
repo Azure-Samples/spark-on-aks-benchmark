@@ -1,2 +1,17 @@
 acr: <youracrhere>.azurecr.io
-email: <youremailhere>
+loki-stack:
+    grafana:
+        enabled: true
+    prometheus:
+        enabled: true
+        alertmanager:
+            persistentVolume:
+                enabled: false
+        server:
+            persistentVolume:
+                enabled: false
+    loki:
+        persistence:
+            enabled: true
+            storageClassName: azurefile-premium
+            size: 5Gi

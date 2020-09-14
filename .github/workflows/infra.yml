@@ -176,6 +176,9 @@ jobs:
       - name: 'Deploy Helm Charts'
         id: helm-spark
         run: |
+          helm repo add loki https://grafana.github.io/loki/charts
+          helm repo update
+          helm dependency update aks-spark-chart
           helm upgrade --install spark aks-spark-chart --set acr=${{ steps.vars.outputs.ACR }}
 
         # When this is ready to be re-added it will need to be indented inline with the above helm command.
