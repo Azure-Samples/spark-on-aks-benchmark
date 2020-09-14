@@ -1,5 +1,4 @@
 acr: <youracrhere>.azurecr.io
-email: <youremailhere>
 loki-stack:
     grafana:
         enabled: true
