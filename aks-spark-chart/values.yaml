@@ -13,5 +13,5 @@ loki-stack:
     loki:
         persistence:
             enabled: true
-            storageClassName: azurefile-premium
+            storageClassName: managed-premium
             size: 5Gi
