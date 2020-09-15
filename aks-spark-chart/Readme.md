@@ -12,7 +12,7 @@
 ## Using Grafana
 The following command is used to get the admin password for Grafana
 ```
-kubectl get secret spark-grafana -o jsonpath="{.data.admin-password}" | base64
+kubectl get secret spark-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 ```
 
 To access the Grafana UI, run the following command:
