@@ -14,6 +14,20 @@ module "aks" {
   tags = local.tags
 }
 
+module "spark_node_pool" {
+  source = "../modules/aks-node-pool"
+
+  name           = "spark"
+  aks_cluster_id = module.aks.id
+  vm_size        = local.spark_cluster_vm_size
+  node_count     = local.spark_aks_pool_size
+  vnet_subnet_id = module.aks_subnet.id
+  node_labels = {
+    "app" : "spark",
+  }
+  tags = local.tags
+}
+
 resource "azurerm_container_registry" "acr" {
   name                = "sparkacr${random_id.storage.hex}"
   resource_group_name = azurerm_resource_group.rg.name
