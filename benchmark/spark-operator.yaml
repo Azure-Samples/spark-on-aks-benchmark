@@ -1,0 +1,35 @@
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: spark-pi
+spec:
+  type: Scala
+  mode: cluster
+  image: sparkacrfde4.azurecr.io/spark-on-aks:stable
+  imagePullPolicy: Always
+  mainClass: org.apache.spark.examples.SparkPi
+  mainApplicationFile: "local:///opt/spark/jars/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar"
+  arguments:
+    - 'abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/data'
+    - 'abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/results'
+    - /opt/tpcds-kit/tools
+    - parquet
+    - '1000'
+    - '1'
+    - 'false'
+    - 'q64-v2.4'
+  sparkVersion: "3.0.0"
+  restartPolicy:
+    type: Never
+  driver:
+    cores: 1
+    memory: "512m"
+    labels:
+      version: 3.0.0
+    serviceAccount: spark
+  executor:
+    cores: 1
+    instances: 2
+    memory: "512m"
+    labels:
+      version: 3.0.0
