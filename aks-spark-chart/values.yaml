@@ -15,3 +15,7 @@ loki-stack:
             enabled: true
             storageClassName: managed-premium
             size: 5Gi
+sparkoperator:
+    sparkJobNamespace: default
+    nodeSelector:
+        app: spark
