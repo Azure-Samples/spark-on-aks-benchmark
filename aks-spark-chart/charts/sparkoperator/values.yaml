@@ -14,7 +14,7 @@ serviceAccounts:
     create: true
     name:
 
-sparkJobNamespace: ""
+sparkJobNamespace: "default"
 installCrds: true
 controllerThreads: 10
 resyncInterval: 30
@@ -37,7 +37,9 @@ metricsPrefix: ""
 ## Node labels for pod assignment
 ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
-nodeSelector: {}
+nodeSelector: {
+  app: spark
+}
 
 ## Tolerations for the sparkoperator deployment
 ##

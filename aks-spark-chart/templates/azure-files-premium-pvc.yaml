@@ -1,0 +1,26 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: fast-files
+provisioner: kubernetes.io/azure-file
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=0
+  - gid=0
+  - mfsymlinks
+  - cache=strict
+parameters:
+  skuName: Premium_LRS
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: azure-files-premium
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: fast-files
+  resources:
+    requests:
+      storage: 1000Gi

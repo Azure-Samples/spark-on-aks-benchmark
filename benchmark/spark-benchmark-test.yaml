@@ -7,12 +7,6 @@ spec:
   mode: cluster
   image: sparkacrfde4.azurecr.io/spark-on-aks:stable
   imagePullPolicy: Always
-  env:
-    - name: TPCDSDATA-KEY
-      valueFrom:
-        secretKeyRef:
-          name: tcpdsdata-key
-          key: key
   mainClass: com.microsoftazure.aks.tpcds.TPCDSBenchmark
   mainApplicationFile: "local:///opt/spark/jars/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar"
   arguments:
@@ -24,28 +18,38 @@ spec:
     - '1'
     - 'false'
     - 'q64-v2.4'
+  hadoopConf:
+    "spark.sql.shuffle.partitions": "100"
   sparkVersion: "3.0.0"
   restartPolicy:
     type: Never
   volumes:
-  - name: scratch
+  - name: "spark-local-dir-1"
     persistentVolumeClaim:
       claimName: azure-managed-disk
+  - name: "spark-local-dir-2"
+    persistentVolumeClaim:
+      claimName: azure-files-premium
   driver:
-    cores: 1
-    memory: "512m"
+    envSecretKeyRefs:
+      TCPDSDATA_KEY:
+        name: tcpdsdata-key
+        key: key
+    cores: 4
+    memory: "8000m"
     labels:
       version: 3.0.0
     serviceAccount: spark
     volumeMounts:
-      - name: scratch
-        mountPath: /data
+      - mountPath: "/tmp/dir1"
+        name: "spark-local-dir-1"
+    terminationGracePeriodSeconds: 60
   executor:
-    cores: 1
-    instances: 2
-    memory: "512m"
+    cores: 2
+    instances: 8
+    memory: "8000m"
     labels:
       version: 3.0.0
     volumeMounts:
-      - name: scratch
-        mountPath: /data
+      - mountPath: "/tmp/dir1"
+        name: "spark-local-dir-2"
