@@ -20,7 +20,7 @@ provider "random" {}
 
 locals {
   name                  = terraform.workspace == "default" ? "sparkOnAks" : "${terraform.workspace}-sparkOnAks"
-  location              = "westus2"
+  location              = "centralus"
   vnet_address_space    = ["10.10.0.0/16"]
   spark_aks_pool_size   = terraform.workspace == "default" ? 10 : 3
   spark_cluster_vm_size = "Standard_L8s_v2"

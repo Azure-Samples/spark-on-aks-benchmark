@@ -2,5 +2,8 @@ dependencies:
 - name: loki-stack
   repository: https://grafana.github.io/loki/charts
   version: 0.40.1
-digest: sha256:b540fcb1e5fe3762968dec68076e90c0257f9afee96d2bd234066d4355f63382
-generated: "2020-09-14T15:25:40.951324-07:00"
+- name: sparkoperator
+  repository: file://subcharts/sparkoperator
+  version: 0.8.2
+digest: sha256:12086bd978d48134550a19797265be4758a039890557b24d288453838cc64813
+generated: "2020-09-18T15:36:42.710135-07:00"

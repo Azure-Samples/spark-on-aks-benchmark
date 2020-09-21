@@ -34,3 +34,6 @@ DO-NOT-CHECK-IN
 
 # Helm Dependencies
 **/charts/*.tgz
+
+
+**/.DS_Store
