@@ -180,6 +180,7 @@ jobs:
           helm repo update
           helm dependency update aks-spark-chart
           helm upgrade --install spark aks-spark-chart --set acr=${{ steps.vars.outputs.ACR }}
+          kubectl create secret generic tcpdsdata-key --from-literal=key=${{ secrets.TCPDS_DATA_KEY }}
 
         # When this is ready to be re-added it will need to be indented inline with the above helm command.
         # helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/

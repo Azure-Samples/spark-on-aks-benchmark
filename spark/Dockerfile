@@ -78,9 +78,6 @@ RUN mkdir /opt/spark/work-dir
 RUN chmod +x /opt/tpcds-kit/tools/checksum /opt/tpcds-kit/tools/dsdgen /opt/tpcds-kit/tools/dsqgen /opt/tpcds-kit/tools/mkheader && \
     chmod +x /opt/tpcds-kit/tools/distcomp
 
-#ADD start-common.sh common.sh start-master start-worker /opt/
-#RUN chmod +x /opt/start-common.sh /opt/start-master /opt/start-worker
-
 # add scripts and update spark default config
 ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
 ADD core-site.xml /opt/spark/conf/core-site.xml
