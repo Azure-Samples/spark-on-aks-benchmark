@@ -31,10 +31,15 @@ This is to benchmark Apache Spark performance on Azure Kubernetes Service (AKS).
 
 | File/folder       | Description                                |
 | ----------------- | ------------------------------------------ |
+| `.github`         | Github specific configuration              |
+| `aks-spark-chart` | Helm Charts                                |
+| `benchmark`       | Benchmark test code                        |
+| `docs`            | Project documentation                      |
 | `env`             | Terraform to build environment             |
-| `kuberentes`      | Kubernetes manifests                       |
 | `spark`           | Spark Docker containers and config         |
+| `spark_dev`       |                                            |
 | `.gitignore`      | Define what to ignore at commit time.      |
+| `CODE_OF_CONDUCT.md` | Code of Conduct for this project        |
 | `CHANGELOG.md`    | List of changes to the sample.             |
 | `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
 | `README.md`       | This README file.                          |
@@ -54,9 +59,9 @@ This project also requires a development environment with the following tools in
 
 ## Setup
 
-[Deploy the Environment](env/Readme.md)
-[Build and Deploy Dockerfiles](spark/Readme.md)
-[Apply Kubernetes configuration](kubernetes/Readme.md)
+- [Deploy the Environment](env/Readme.md)
+- [Build and Deploy Dockerfiles](spark/Readme.md)
+- [Apply Kubernetes configuration](kubernetes/Readme.md)
 
 ## Running the sample
 
