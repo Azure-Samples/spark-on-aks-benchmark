@@ -1,7 +1,7 @@
 apiVersion: "sparkoperator.k8s.io/v1beta2"
 kind: SparkApplication
 metadata:
-  name: spark-pi1
+  name: spark-q64
 spec:
   type: Scala
   mode: cluster
@@ -17,7 +17,7 @@ spec:
     - "1000"
     - "5"
     - "false"
-    - 'q64-v2.4'
+    - "q64-v2.4"
   sparkConf:
     "spark.eventLog.enabled": "true"
     "spark.eventLog.dir": "abfss://tpcds@tpcds1tb.dfs.core.windows.net/logs"
@@ -28,7 +28,7 @@ spec:
     "spark.sql.crossJoin.enabled": "true"
     "spark.sql.parquet.mergeSchema": "false"
     "spark.sql.parquet.filterPushdown": "true"
-    "spark.kubernetes.node.selector.app": "edisk"
+    "spark.kubernetes.node.selector.app": "spark"
     "spark.sql.cbo.enabled": "true"
     "spark.sql.cbo.joinReorder.enabled": "true"
     "spark.serializer": "org.apache.spark.serializer.KryoSerializer"
@@ -36,6 +36,7 @@ spec:
     "spark.shuffle.compress": "true"
     "spark.shuffle.spill.compress": "true"
     "spark.broadcast.compress": "true"
+  timeToLiveSeconds: 3600
   sparkVersion: "3.0.0"
   restartPolicy:
     type: Never
