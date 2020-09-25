@@ -1,26 +1,6 @@
 #!/bin/bash
 
-# Assumption is that spark master and slave is already started.
-# This script will call spark_submit with the build jar file to generrated 1GB of data.
-# data is generated into the ../tpcds_data folder
-
-export SPARK_MASTER=spark://https://default-sparkonaks-k8s-79607165.hcp.westus2.azmk8s.io:443:7077
-#export CLASS=com.databricks.spark.sql.perf.tpcds.TPCDSTables
-export DATA_DIR="abfs://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/"
-export TOOL_DIR="/opt/tpcds-kit/tools"
-#export JARS="abfss://tpcds@sparkonakstpcdsdataset.blob.core.windows.net/benchmark/spark-sql-perf_2.12_latest.jar"
-#export BENCHMARK="abfss://tpcds@sparkonakstpcdsdataset.blob.core.windows.net/benchmark/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar"
-
-export JARS="//opt/spark/jars/spark-sql-perf_2.12_latest.jar"
-export BENCHMARK="//opt/spark/jars/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar"
-
-echo $JARS
-echo $BENCHMARK
-
-read -p "Enter Shared Key : " $key
-
-#object TPCDSBenchmark {
-#  def main(args: Array[String]) {
+# Parameters for TPCDSBenchmark
 #    val tpcdsDataDir = args(0)
 #    val resultLocation = args(1)
 #    val dsdgenDir = args(2)
@@ -32,35 +12,42 @@ read -p "Enter Shared Key : " $key
 #    val filterQueries = Try(args(7).toString).getOrElse("")
 #    val onlyWarn = Try(args(8).toBoolean).getOrElse(false)
 
-
-./bin/spark-submit \
-        --master k8s://https://default-sparkonaks-k8s-79607165.hcp.westus2.azmk8s.io:443 \
+$SPARK_HOME/bin/spark-submit \
+        --master k8s://https://testing-sparkonaks-k8s-4aa37c36.hcp.eastus2.azmk8s.io:443 \
         --deploy-mode cluster \
         --class com.microsoftazure.aks.tpcds.TPCDSBenchmark \
-        --conf spark.executor.instances=10 \
         --conf spark.driver.cores=4 \
-        --conf spark.executor.cores=2 \
-        --conf spark.executor.memory=8000m \
         --conf spark.driver.memory=8000m \
-        --conf spark.speculation=false \
-        --conf spark.speculation.multiplier=3 \
-        --conf spark.speculation.quantile=0.9 \
+        --conf spark.driver.memoryOverhead=2G \
+        --conf spark.executor.cores=2 \
+        --conf spark.executor.instances=10 \
+        --conf spark.executor.memory=8000m \
+        --conf spark.executor.memoryOverhead=2G \
         --conf spark.sql.broadcastTimeout=7200 \
         --conf spark.sql.crossJoin.enabled=true \
+        --conf spark.sql.cbo.enabled=true \
         --conf spark.sql.parquet.mergeSchema=false \
         --conf spark.sql.parquet.filterPushdown=true \
         --conf spark.app.name=tpcds \
-        --conf spark.kubernetes.container.image=sparkacrbacf.azurecr.io/spark:prod1 \
+        --conf spark.network.timeout=900s \
+        --conf spark.kubernetes.container.image=sparkacr4c58.azurecr.io/spark-on-aks:stable \
         --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
         --conf spark.authenticate=false \
-        --conf spark.kubernetes.node.selector.app=spark \
+        --conf spark.eventLog.enabled=true \
+        --conf spark.eventLog.dir=abfss://tpcds@tpcds1tb.dfs.core.windows.net/logs \
+        --conf spark.kubernetes.node.selector.agentpool=ephemeral \
+        --conf spark.shuffle.compress=true \
+        --conf spark.shuffle.spill.compress=true \
+        --conf spark.yarn.submit.waitAppCompletion=false \
+        --conf spark.serializer=org.apache.spark.serializer.KryoSerializer \
+        --conf spark.local.dir=/tmp/mnt-1 \
+        --conf spark.kubernetes.executor.volumes.hostPath.spark-local-dir-1.mount.path=/tmp/mnt-1 \
+        --conf spark.kubernetes.executor.volumes.hostPath.spark-local-dir-1.options.path=/tmp/mnt-1 \
         --conf spark.kubernetes.container.image.pullPolicy=Always \
         --conf spark.kubernetes.file.upload.path=/opt/spark/work-dir \
-        --conf spark.kubernetes.appKillPodDeletionGracePeriod=30 \
-        --conf spark.hadoop.fs.azure.account.auth.type.sparkonakstpcdsdataset.dfs.core.windows.net=SharedKey \
-        --conf spark.hadoop.fs.azure.account.key.sparkonakstpcdsdataset.dfs.core.windows.net=$key \
+        --conf spark.hadoop.fs.azure.account.auth.type.tpcds1tb.dfs.core.windows.net=SharedKey \
+        --conf spark.hadoop.fs.azure.account.key.tpcds1tb.dfs.core.windows.net=$ReplaceWithKey \
          "local:///opt/spark/jars/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar" \
-         "abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/data" \
-         "abfss://tpcds@sparkonakstpcdsdataset.dfs.core.windows.net/data/results" \
-         "/opt/tpcds-kit/tools" parquet 1000 1 false q70-v2.4,q71-v2.4
-
+         "abfss://tpcds@tpcds1tb.dfs.core.windows.net/data" \
+         "abfss://tpcds@tpcds1tb.dfs.core.windows.net/results" \
+         "/opt/tpcds-kit/tools" parquet 1000 5 false q64-v2.4
