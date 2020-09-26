@@ -19,8 +19,6 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-This is to benchmark Apache Spark performance on Azure Kubernetes Service (AKS).
-
 ## Build Status
 
 | Status                                                                            |
