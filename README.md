@@ -19,8 +19,6 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-This is to benchmark Apache Spark performance on Azure Kubernetes Service (AKS).
-
 ## Build Status
 
 | Status                                                                            |
@@ -44,33 +42,16 @@ This is to benchmark Apache Spark performance on Azure Kubernetes Service (AKS).
 | `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
 | `README.md`       | This README file.                          |
 | `LICENSE`         | The license for the sample.                |
-
-## Prerequisites
-
-This project requires the user to have access to the following:
-
-- An Azure AAD Tenant and the ability to create AAD Applications
-- An Azure Subscription
-
-This project also requires a development environment with the following tools installed
-
-- [Terraform](https://learn.hashicorp.com/terraform/getting-started/install)
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-
-## Setup
-
-- [Deploy the Environment](env/Readme.md)
-- [Build and Deploy Dockerfiles](spark/Readme.md)
-- [Apply Kubernetes configuration](kubernetes/Readme.md)
-
-## Running the sample
-
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
-
-## Key concepts
-
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
-
+___
+## Introduction
+[Apache Spark](http://spark.apache.org/) is popular distributed analytics engine designed to process large data sets through the use of distributed workers. This is a natural use-case for Kubernetes. The goal of this project is to evaluate and tune the performance of the Azure Kubernetes Service in running Spark.
+___
+## TPC-DS Benchmark
+When evaluating platform configuration, the [TPC-DS](http://www.tpc.org/tpcds/default5.asp) benchmark was used to measure performance.
+<!-- TODO: Add more info about the Benchmark -->
+## Getting Started
+Follow [these instructions](docs/quick-start-guide.md) for running the benchmark against AKS.
+___
 ## Contributing
 
 This project welcomes contributions and suggestions. Most contributions require you to agree to a
