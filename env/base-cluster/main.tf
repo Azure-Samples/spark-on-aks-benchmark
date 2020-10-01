@@ -22,7 +22,7 @@ locals {
   name                  = terraform.workspace == "default" ? "sparkOnAks" : "${terraform.workspace}-sparkOnAks"
   location              = "eastus2"
   vnet_address_space    = ["10.10.0.0/16"]
-  spark_aks_pool_size   = terraform.workspace == "default" ? 10 : 3
+  spark_aks_pool_size   = terraform.workspace == "default" ? 3 : 5
   spark_cluster_vm_size = "Standard_L8s_v2"
   admin_username        = "azureuser"
 
