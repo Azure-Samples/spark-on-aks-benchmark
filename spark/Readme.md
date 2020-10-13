@@ -11,6 +11,7 @@ Working repository for running spark TPCSDS benchmark on AKS
 | `tpcds_jar`       | Folder contains jar files to tpcds execution |
 | `tpcds-kit`       | Spark Docker containers and config           |
 
+
 # Spark env Dockerfile
 It is using the 
       Hadoop version 3.3.0 
@@ -26,6 +27,7 @@ Dockerfile copies tpcds_jars to /opt/spark/jars in the container.
 
 # Spark env lib folder
 The folder also contains two jar files under tpcds_jars
+
 | File                                  | Description                                                                            |
 | ------------------------------------  | ---------------------------------------------------------------------------------------|
 | `spark-sql=perf_2.12_latest.jar`      | This jar file is compatible with version Spark 3.0.0                                   |
@@ -42,3 +44,4 @@ The folder also contains two jar files under tpcds_jars
 | `format`    `         | As of now we are supporting only parquet.                                              |
 | `iterations`    `     | Direcory for tpcsds-data.                                                              |
 | `queryFilter`    `    | We can specify the number of query we want TPCDSBenchmark to execute.                  |
+
