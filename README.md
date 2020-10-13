@@ -54,17 +54,60 @@ This project also requires a development environment with the following tools in
 
 ## Setup
 
-[Deploy the Environment](env/Readme.md)
-[Build and Deploy Dockerfiles](spark/Readme.md)
-[Apply Kubernetes configuration](kubernetes/Readme.md)
+- [Deploy the Environment](env/Readme.md)
+- [Build and Deploy Dockerfiles](spark/Readme.md)
+- [Apply Kubernetes configuration](kubernetes/Readme.md)
+- [Run benchmark]benchmark/README.md)
+
+## About TPC-DS Benchmark
+
+TPC-DS, a third-party committee that provides industry standard benchmark tools for measuring performance of decision support solutions. You can access the various tools on their [website](http://www.tpc.org/tpcds/default5.asp).
+
+In this benchmark, we evaluated and measured the performance of Spark SQL using the TPC-DS benchmark on Azure Kubernetes (AKS). Our tests was limited to q64-v2.4, q70-v2.4, q82-v2.4
+
+
 
 ## Running the sample
 
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
+The required steps to run the performance benchmark is documented [here](./benchmark/README.md)
 
-## Key concepts
+### Kubernetes Node pools
 
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+Benchmark test was executed on 2 different types of Node sizes.
+
+| Node size        | Node count | OS disk size | OS disk type |
+|------------------|------------|--------------|--------------|
+| Standard_L8s_v2  | 5          | 256          | Premium      |
+| Standard_DS13_v2 | 5          | 256          | Ephemeral    |
+| Standard_DS13_v2 | 5          | 256          | Premium      |
+
+### Spark parameters
+
+The following sparkConfig was used for this benchmark.  
+
+| sparkConfig        | Value |
+|--------------------|-------|
+| spark.driver.cores | 4     |
+| spark.driver.memory | 16000m |
+| spark.driver.memoryOverhead | 2000m |
+| spark.executor.cores | 4     |
+| spark.executor.memory | 16000m |
+| spark.executor.memoryOverhead | 2000m |
+
+| Serializer       |  Value                                          | Default |                  |
+|------------------|--------------------------------------------|--|------------------|
+| spark.serializer | org.apache.spark.serializer.KryoSerializer | default value "" |
+
+Additional parameters are documented in [this](benchmark/spark-benchmark-test.yaml) SparkApplication yaml. 
+
+## Results
+
+In total, 10 iterations of the query have been executed and median execution time was recorded.
+
+
+  
+
+
 
 ## Contributing
 
