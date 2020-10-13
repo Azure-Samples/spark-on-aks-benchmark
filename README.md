@@ -77,9 +77,9 @@ Benchmark test was executed on 2 different types of Node sizes.
 
 | Node size        | Node count | OS disk size | OS disk type |
 |------------------|------------|--------------|--------------|
-| Standard_L8s_v2  | 5          | 256          | Premium      |
-| Standard_DS13_v2 | 5          | 256          | Ephemeral    |
-| Standard_DS13_v2 | 5          | 256          | Premium      |
+| [Standard_L8s_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/lsv2-series?toc=/azure/virtual-machines/linux/toc.json&bc=/azure/virtual-machines/linux/breadcrumb/toc.json)  | 5          | 256          | [Premium](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-types#:~:text=Azure%20premium%20SSDs%20deliver%20high-performance%20and%20low-latency%20disk,Premium%20SSDs%20are%20suitable%20for%20mission-critical%20production%20applications.)      |
+| [Standard_DS13_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series-memory) | 5          | 256          | [Ephemeral](https://docs.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks)    |
+| [Standard_DS13_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series-memory) | 5          | 256          | [Premium](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-types#:~:text=Azure%20premium%20SSDs%20deliver%20high-performance%20and%20low-latency%20disk,Premium%20SSDs%20are%20suitable%20for%20mission-critical%20production%20applications.)      |
 
 ### Spark parameters
 
@@ -94,20 +94,26 @@ The following sparkConfig was used for this benchmark.
 | spark.executor.memory | 16000m |
 | spark.executor.memoryOverhead | 2000m |
 
-| Serializer       |  Value                                          | Default |                  |
-|------------------|--------------------------------------------|--|------------------|
-| spark.serializer | org.apache.spark.serializer.KryoSerializer | default value "" |
+| Serializer       |  Value                                     | Default |
+|------------------|--------------------------------------------|---------|
+| spark.serializer | org.apache.spark.serializer.KryoSerializer | Java serialization |
 
-Additional parameters are documented in [this](benchmark/spark-benchmark-test.yaml) SparkApplication yaml. 
+Additional parameters are documented in [this](benchmark/spark-benchmark-test.yaml) SparkApplication yaml.
 
 ## Results
 
 In total, 10 iterations of the query have been executed and median execution time was recorded.
 
+- Execution time of q64 with Ephemeral OS disk
+
 
   
 
 
+
+### Observations
+
+-  
 
 ## Contributing
 
