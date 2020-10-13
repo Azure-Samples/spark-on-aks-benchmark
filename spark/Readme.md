@@ -3,6 +3,17 @@
 
 Working repository for running spark TPCSDS benchmark on AKS
 
+## Contents
+
+| File/folder       | Description                                |
+| ----------------- | ------------------------------------------ |
+| `env`             | Terraform to build environment             |
+| `kuberentes`      | Kubernetes manifests                       |
+| `spark`           | Spark Docker containers and config         |
+| `.gitignore`      | Define what to ignore at commit time.      |
+| `CHANGELOG.md`    | List of changes to the sample.             |
+| `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
+
 # Spark env Dockerfile
 It is using the 
       Hadoop version 3.3.0 
