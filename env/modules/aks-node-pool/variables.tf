@@ -10,6 +10,9 @@ variable "aks_cluster_id" {
 variable "vm_size" {
   type = string
 }
+variable "os_disk_size" {
+  type = number
+}
 variable "node_count" {
   type = number
 }
