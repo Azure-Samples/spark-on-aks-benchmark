@@ -20,6 +20,7 @@ module "spark_node_pool" {
   name           = "spark"
   aks_cluster_id = module.aks.id
   vm_size        = local.spark_cluster_vm_size
+  os_disk_size   = 512
   node_count     = local.spark_aks_pool_size
   vnet_subnet_id = module.aks_subnet.id
   node_labels = {
