@@ -39,6 +39,14 @@ The Terraform state file will be stored in Azure. This requires a Storage Accoun
 
 **NOTE: These variables will be used through the example code below**
 
+###Storage Scale
+
+Increase Storage throughput limits via support ticket in the Azure Portal:
+
+1. In the portal, open the storage account, scroll down in the menu on the left and select "New support request"
+1. Select "Service and subscription limits (quotas)" as Issue type and for Quota type "Storage: Per account limits"
+1. In the request details, select your storage account, and enter the possible allowed maximum according to this document (https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits#storage-limits) The documented limits are soft limits, it is important to know that it is possible to increase these limits beyond what is described there if you discuss thoroughly with support.
+
 ## Terraform Workspace
 
 Terraform has a workspace concept and when creating a development environment some variables in the deployment will use this workspace information to limit the number of items deployed to control resources in lower environments.
