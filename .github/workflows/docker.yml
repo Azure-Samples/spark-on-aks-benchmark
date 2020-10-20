@@ -9,78 +9,15 @@ on:
       - master
       - release/*
     paths:
-    - 'env/**'
+    - 'spark/**'
     - '!**/*.md'
   pull_request:
     branches:
       - master
     paths:
-    - 'env/**'
+    - 'spark/**'
     - '!**/*.md'
 jobs:
-  terraform:
-    name: "Terraform"
-    runs-on: ubuntu-latest
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
-
-    # Set environment variables for steps
-    env:
-      SUB: ${{ secrets.SUB }}
-      CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      TENANT_ID: ${{ secrets.TENANT_ID }}
-      PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
-
-    # Checkout the repository to the GitHub Actions runner
-    steps:
-      - uses: actions/checkout@v2
-      - uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_wrapper: false
-
-      - name: Check Terraform version
-        run: terraform version
-        id: version
-
-      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
-        id: init
-        run: terraform init -backend-config="resource_group_name=${{ secrets.TF_STORAGE_RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ secrets.TF_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.TF_STORAGE_CONTAINER_NAME }}" -backend-config="key=${{ secrets.TF_STORAGE_KEY }}" -backend-config="access_key=${{ secrets.TF_STORAGE_ACCESS_KEY }}"
-        working-directory: ./env/base-cluster
-
-      # Generates an execution plan for Terraform
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" -var="public_key=$PUBLIC_KEY"
-        working-directory: ./env/base-cluster
-        continue-on-error: true
-
-        # On push to master, build or change infrastructure according to Terraform configuration files
-      - name: Terraform Apply
-        id: apply
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-        run: |
-          terraform apply -auto-approve -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" -var="public_key=$PUBLIC_KEY"
-        working-directory: ./env/base-cluster
-
-      - name: Terraform Output
-        id: output
-        run: |
-          echo $(terraform output acr_name) > acr_name.txt
-          echo $(terraform output aks_name) > aks_name.txt
-          echo $(terraform output rg_name) > rg_name.txt
-        working-directory: ./env/base-cluster
-
-      - name: Upload Terraform Output
-        uses: actions/upload-artifact@v2
-        with:
-          name: drop
-          path: ./env/base-cluster/*.txt
-
   docker:
     needs: terraform
     runs-on: ubuntu-latest
@@ -174,4 +111,3 @@ jobs:
           helm dependency update aks-spark-chart
           helm upgrade --install spark aks-spark-chart --set acr=${{ steps.vars.outputs.ACR }}
           kubectl create secret generic tcpdsdata-key --from-literal=key=${{ secrets.TCPDS_DATA_KEY }}
-
