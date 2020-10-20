@@ -27,6 +27,12 @@ Make sure tpcds-kit/tools folder is copied to /opt/tpcds-kit/tools on the Docker
 ## Build Docker image
 
 The Docker file for preparing is the image is located [Here](../spark/Dockerfile).
+=======
+TODO: 
+
+## Build Docker image
+
+The Docker file for preparing is the image is located [Here](../spark/Dockerfile). We have used Spark 3.0.0
 
 ## Run benchmark
 

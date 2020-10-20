@@ -64,7 +64,6 @@ This project also requires a development environment with the following tools in
 TPC-DS, a third-party committee that provides industry standard benchmark tools for measuring performance of decision support solutions. You can access the various tools on their [website](http://www.tpc.org/tpcds/default5.asp).
 
 In this benchmark, we evaluated and measured the performance of Spark SQL using the TPC-DS benchmark on Azure Kubernetes (AKS). Our tests was limited to q64-v2.4, q70-v2.4, q82-v2.4
-
 These queries were executed with the wrapper written by Databricks https://github.com/npoggi/spark-sql-perf/tree/spark-3_update
 
 ## Running the sample
@@ -110,11 +109,6 @@ In total, 10 iterations of the query have been executed and median execution tim
 - Execution time(in seconds) of q82, q70 with Ephemeral vs Premium OS disk
 
 ![q64 results](q82-q70-result.PNG)
-
-### Observations
-
-## Acknowledgements  
-
 
 ## Contributing
 
