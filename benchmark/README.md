@@ -10,11 +10,23 @@ Follow the steps listed [here](https://docs.microsoft.com/en-us/azure/storage/bl
 
 ## Build benchmark utility
 
-TODO: 
+Download the TPC-DS kit from [tpc.org](http://www.tpc.org/tpcds/)
+
+### Linux Setup
+
+Install the required development tools on Ubuntu
+
+````
+sudo apt-get install gcc make flex bison byacc git
+cd tpcds-kit/tools
+make OS=LINUX
+````
+
+Make sure tpcds-kit/tools folder is copied to /opt/tpcds-kit/tools on the Docker image.
 
 ## Build Docker image
 
-The Docker file for preparing is the image is located [Here](../spark/Dockerfile). We have used Spark 3.0.0
+The Docker file for preparing is the image is located [Here](../spark/Dockerfile).
 
 ## Run benchmark
 
@@ -47,8 +59,7 @@ The Docker file for preparing is the image is located [Here](../spark/Dockerfile
 You can capture extract the query executive time using the pod logs or the output folder location
 
   - Use Azure Storage Explorer [download here](https://azure.microsoft.com/en-us/features/storage-explorer/)  to check execution results in ADLS Gen2 storage
-  - Checking pod log
+  - Checking container logs
     ```
-    kubectl log <driver pod name>
+    kubectl logs <driver pod name>
     ```
-  

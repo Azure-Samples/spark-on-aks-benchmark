@@ -57,13 +57,15 @@ This project also requires a development environment with the following tools in
 - [Deploy the Environment](env/Readme.md)
 - [Build and Deploy Dockerfiles](spark/Readme.md)
 - [Apply Kubernetes configuration](kubernetes/Readme.md)
-- [Run benchmark]benchmark/README.md)
+- [Run benchmark](benchmark/README.md)
 
 ## About TPC-DS Benchmark
 
 TPC-DS, a third-party committee that provides industry standard benchmark tools for measuring performance of decision support solutions. You can access the various tools on their [website](http://www.tpc.org/tpcds/default5.asp).
 
 In this benchmark, we evaluated and measured the performance of Spark SQL using the TPC-DS benchmark on Azure Kubernetes (AKS). Our tests was limited to q64-v2.4, q70-v2.4, q82-v2.4
+
+These queries were executed with the wrapper written by Databricks https://github.com/npoggi/spark-sql-perf/tree/spark-3_update
 
 ## Running the sample
 
@@ -75,7 +77,6 @@ Benchmark test was executed on 2 different types of Node sizes.
 
 | Node size        | Node count | OS disk size | OS disk type |
 |------------------|------------|--------------|--------------|
-| [Standard_L8s_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/lsv2-series?toc=/azure/virtual-machines/linux/toc.json&bc=/azure/virtual-machines/linux/breadcrumb/toc.json)  | 5          | 256          | [Premium](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-types#:~:text=Azure%20premium%20SSDs%20deliver%20high-performance%20and%20low-latency%20disk,Premium%20SSDs%20are%20suitable%20for%20mission-critical%20production%20applications.)      |
 | [Standard_DS13_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series-memory) | 5          | 256          | [Ephemeral](https://docs.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks)    |
 | [Standard_DS13_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series-memory) | 5          | 256          | [Premium](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-types#:~:text=Azure%20premium%20SSDs%20deliver%20high-performance%20and%20low-latency%20disk,Premium%20SSDs%20are%20suitable%20for%20mission-critical%20production%20applications.)      |
 
@@ -94,7 +95,7 @@ The following sparkConfig was used for this benchmark.
 
 | Serializer       |  Value                                     | Default |
 |------------------|--------------------------------------------|---------|
-| spark.serializer | org.apache.spark.serializer.KryoSerializer | Java serialization |
+| [spark.serializer](https://spark.apache.org/docs/latest/tuning.html) | org.apache.spark.serializer.KryoSerializer | Java serialization |
 
 Additional parameters are documented in [this](benchmark/spark-benchmark-test.yaml) SparkApplication yaml.
 
@@ -104,15 +105,16 @@ In total, 10 iterations of the query have been executed and median execution tim
 
 - Execution time(in seconds) of q64 with Ephemeral vs Premium OS disk
 
-![q64 results](q64result.PNG)
+![q64 results](q64-result.PNG)
 
 - Execution time(in seconds) of q82, q70 with Ephemeral vs Premium OS disk
 
-![q64 results](q82-q-70-dsvm.PNG)
+![q64 results](q82-q70-result.PNG)
 
 ### Observations
 
- 
+## Acknowledgements  
+
 
 ## Contributing
 
