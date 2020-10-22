@@ -17,6 +17,7 @@ If you already have an AKS Cluster where you want to deploy the Spark Operator, 
 
 [Azure CLI]()
 [Terraform]()
+[Helm]()
 
 ## Azure CLI
 The [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) will be required to run the scripts and examples in this repo. These commands can be completed in PowerShell but will need to be converted and those conversions are not provided at this time.
@@ -139,6 +140,14 @@ terraform destroy \
 
 ### Helm
 The deployment of the Spark Operator leverages [Helm](https://helm.sh/docs/intro/install/)
+
+The Helm deployment includes dependencies and sub charts outlined below.
+
+#### Loki Stack
+
+The Grafana loki stack is a monitoring tool that includes Prometheus, Grafana, Promtail, and Loki. These tools combined provide data on the health of the Spark deployment on Kubernetes. See the [Loki page](loki.md) for more information regarding its use and configuration in this deployment
+
+#### Spark Operator
 
 ___
 ## Generate the TPC-DS Test Data Set
