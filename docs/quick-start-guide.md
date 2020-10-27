@@ -92,6 +92,8 @@ az storage fs create \
 ## Terraform
 The environment is deployed using [Terraform](https://www.terraform.io/downloads.html) and uses Azure Storage to manage the state of the environment. If you have run the script amove there will be some reused variables. If you already have a storage container for the state, you will need to add `STORAGE_NAME=<your_storage_account>` and `SHARED_RESOURCES_NAME=<your shared resource group>` to the variables block below.
 
+__KNOWN ISSUES:__ There is a known issue when initially deploying the environment via Terraform. The ACR might finish before the Network ACL and Subnet are completed. If you run into this issue, you can resolve it by re-running the `terraform apply` command. We have also compiled a list of [common troubleshooting steps](./troubleshooting.md)
+
 ```bash
 # Variables
 CONTAINER_NAME=tstate
@@ -138,16 +140,41 @@ terraform destroy \
 
 ```
 
-### Helm
+### Post Deployment
+
+There are a few things that are not none handled by the Terraform. Some of these include logging into the ACR to publish the docker image. Connecting ACR to AKS.
+
+```bash
+bash ./env/scripts/post-deployment.sh
+```
+
+## Docker
+The benchmark tests use a custom docker image.
+
+<!-- TODO: Add more info about the Docker Container -->
+
+```bash
+ACR_NAME=<your acr name> #if you have run the post deployment script, you will not need to set this
+
+docker build ./spark/ -t $ACR_NAME.azurecr.io/spark-on-aks:stable
+docker push $ACR_NAME.azurecr.io/spark-on-aks:stable
+
+```
+
+## Helm
 The deployment of the Spark Operator leverages [Helm](https://helm.sh/docs/intro/install/)
 
 The Helm deployment includes dependencies and sub charts outlined below.
 
-#### Loki Stack
+Deployment
+
+### Loki Stack
 
 The Grafana loki stack is a monitoring tool that includes Prometheus, Grafana, Promtail, and Loki. These tools combined provide data on the health of the Spark deployment on Kubernetes. See the [Loki page](loki.md) for more information regarding its use and configuration in this deployment
 
-#### Spark Operator
+### Spark Operator
+
+The [Spark Operator](https://github.com/GoogleCloudPlatform/spark-on-k8s-operator) was developed by Google to simplify running Spark workloads on Kubernetes. The Google team deployed this as a Helm chart from Helm 2 but because they don't have a managed Helm 3 repo, it has been added as a sub-chart instead of a dependency. This Spark Operator is what allows the submitting of Spark Jobs as native Kubernetes YAML files.
 
 ___
 ## Generate the TPC-DS Test Data Set
