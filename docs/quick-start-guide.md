@@ -164,9 +164,15 @@ docker push $ACR_NAME.azurecr.io/spark-on-aks:stable
 ## Helm
 The deployment of the Spark Operator leverages [Helm](https://helm.sh/docs/intro/install/)
 
-The Helm deployment includes dependencies and sub charts outlined below.
+The Helm deployment includes dependencies and sub charts outlined in the sections below.
 
-Deployment
+To deploy the Helm chart
+
+```bash
+ACR_NAME=<your acr name> #if you have run the post deployment script, you will not need to set this
+
+helm upgrade --install spark aks-spark-chart --set acr=$ACR_NAME.azurecr.io
+```
 
 ### Loki Stack
 
