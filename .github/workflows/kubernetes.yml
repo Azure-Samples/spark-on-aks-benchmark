@@ -1,0 +1,67 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
+name: "Production"
+
+on:
+  push:
+    branches:
+      - master
+      - release/*
+    paths:
+    - 'aks-spark-chart/**'
+    - '!**/*.md'
+  pull_request:
+    branches:
+      - master
+    paths:
+    - 'aks-spark-chart/**'
+    - '!**/*.md'
+jobs:
+  aks:
+    needs: docker
+    runs-on: ubuntu-latest
+    name: "Kubernetes"
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download Drop
+        uses: actions/download-artifact@v1
+        with:
+          name: drop
+
+      - name: Set Variable
+        id: vars
+        run: |
+          echo ::set-output name=AKS::$(cat drop/aks_name.txt)
+          echo ::set-output name=AKS_RG::$(cat drop/rg_name.txt)
+          echo ::set-output name=ACR::$(cat drop/acr_name.txt)
+
+
+      # Set the target AKS cluster.
+      - uses: Azure/aks-set-context@v1
+        with:
+          creds: "${{ secrets.AZURE_CREDENTIALS }}" # Azure credentials
+          resource-group: ${{ steps.vars.outputs.AKS_RG }}
+          cluster-name: ${{ steps.vars.outputs.AKS }}
+
+      # Deploy environment via Helm
+      - name: 'Install Helm'
+        uses: azure/setup-helm@v1
+        with:
+          version: latest
+        id: 'install'
+
+      - name: 'Deploy Helm Charts'
+        id: helm-spark
+        run: |
+          helm repo add loki https://grafana.github.io/loki/charts
+          helm repo update
+          helm dependency update aks-spark-chart
+          helm upgrade --install spark aks-spark-chart --set acr=${{ steps.vars.outputs.ACR }}
+          kubectl create secret generic tcpdsdata-key --from-literal=key=${{ secrets.TCPDS_DATA_KEY }}
+
