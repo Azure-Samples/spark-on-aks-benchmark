@@ -5,22 +5,22 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  image: sparkacr13ad5.azurecr.io/spark-on-aks:stable
+  image: sparkacrd8f2.azurecr.io/spark-on-aks:stable
   imagePullPolicy: Always
   mainClass: com.microsoftazure.aks.tpcds.TPCDSBenchmark
   mainApplicationFile: "local:///opt/spark/jars/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar"
   arguments:
-    - "abfss://tpcds@tpcds1tb.dfs.core.windows.net/data"
-    - "abfss://tpcds@tpcds1tb.dfs.core.windows.net/results"
+    - "abfss://tpcds@tpcdsdata.dfs.core.windows.net/data"
+    - "abfss://tpcds@tpcdsdata.dfs.core.windows.net/results"
     - "/opt/tpcds-kit/tools"
     - "parquet"
     - "1000"
-    - "10"
+    - "1"
     - "false"
-    - "q64-v2.4"
+    # - "q64-v2.4"
   sparkConf:
     "spark.eventLog.enabled": "true"
-    "spark.eventLog.dir": "abfss://tpcds@tpcds1tb.dfs.core.windows.net/logs"
+    "spark.eventLog.dir": "abfss://tpcds@tpcdsdata.dfs.core.windows.net/logs"
     "spark.speculation": "false"
     "spark.speculation.multiplier": "3"
     "spark.speculation.quantile": "0.9"
