@@ -187,5 +187,10 @@ ___
 
 ___
 ## Running Benchmarks
+Templates used to create testes can be found in the `benchmar/` folder. With the environment configured and the test data set generated, running the following command will run the benchmark test
+
+```bash
+kubectl apply -f benchmark/spark-benchmark-test.yaml
+```
 
 ___
