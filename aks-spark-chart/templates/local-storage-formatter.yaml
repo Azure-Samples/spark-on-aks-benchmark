@@ -1,0 +1,93 @@
+
+# Source: provisioner/templates/provisioner-service-account.yaml
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: local-storage-admin
+  namespace: default
+
+---
+# Source: provisioner/templates/provisioner-cluster-role-binding.yaml
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: local-storage-provisioner-pv-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: local-storage-admin
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: system:persistent-volume-provisioner
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: local-storage-provisioner-node-clusterrole
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: local-storage-provisioner-node-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: local-storage-admin
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: local-storage-provisioner-node-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: local-storage-formatter
+  namespace: default
+  labels:
+    app: local-storage-formatter
+spec:
+  selector:
+    matchLabels:
+      app: local-storage-formatter
+  template:
+    metadata:
+      labels:
+        app: local-storage-formatter
+    spec:
+      nodeSelector:
+        agentpool: nvme
+      serviceAccountName: local-storage-admin
+      containers:
+      - image: "docker.io/alexeldeib/az-local-pvc:path"
+        imagePullPolicy: "Always"
+        name: formatter
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath:  /pv-disks
+          name: pv-disks
+          mountPropagation: "Bidirectional"
+        - mountPath: /sys
+          name: sys
+      volumes:
+        - name: provisioner-dev
+          hostPath:
+            path: /dev
+        - name: pv-disks
+          hostPath:
+            path: /pv-disks
+        - name: sys
+          hostPath:
+            path: /sys
+---
