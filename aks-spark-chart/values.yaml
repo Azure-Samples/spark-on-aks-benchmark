@@ -1,5 +1,10 @@
 tcpdsTest:
     acr: <youracrhere>.azurecr.io
+spark-operator:
+    sparkJobNamespace: "default"
+    nodeSelector: {
+        app: spark
+    }
 loki-stack:
     grafana:
         enabled: true
