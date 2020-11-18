@@ -86,9 +86,9 @@ az storage account create \
   --location $LOCATION \
   --resource-group $RESOURCE_GROUP_NAME
 
-$STORAGE_ACCOUNT_KEY=$(az storage account keys list \
+STORAGE_ACCOUNT_KEY=$(az storage account keys list \
   --account-name $STORAGE_ACCOUNT_NAME \
-  -resource-group $RESOURCE_GROUP_NAME \
+  --resource-group $RESOURCE_GROUP_NAME \
   --query '[0].{Value:value}' \
   --output tsv)
 
