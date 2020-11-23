@@ -1,0 +1,14 @@
+{
+  "Registrations": [
+    {
+      "Component": {
+        "Type": "other",
+        "Other": {
+          "Name": "Spark Operator",
+          "Version": "1.0.0",
+          "DownloadUrl": "https://github.com/GoogleCloudPlatform/spark-on-k8s-operator/releases/download/spark-operator-1.0.0/spark-operator-1.0.0.tgz"
+        }
+      }
+    }
+  ]
+}
