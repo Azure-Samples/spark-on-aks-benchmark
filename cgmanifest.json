@@ -1,13 +1,32 @@
-{"Registrations":[ 
-    {
-      "component": { 
-       "type": "git", 
-       "git": { 
-         "repositoryUrl": "https://github.com/databricks/spark-sql-perf", 
-         "commitHash": "d85f75bb38a11b10562d2fed7e3ee8e78ee2f97d" 
-         }
-       }
-    }
- ],
- "Version": 1
+{
+	"registrations": [
+		{
+			"component": {
+				"type": "git",
+				"git": {
+					"name": "databricks",
+          "repositoryUrl": "https://github.com/databricks/spark-sql-perf", 
+          "commitHash": "d85f75bb38a11b10562d2fed7e3ee8e78ee2f97d" 
+				}
+			},
+			"licenseDetail": [
+				
+			],
+			"isOnlyProductionDependency": true,
+			"version": "0.0.0"
+		},
+		{
+			"component": {
+				"type": "other",
+				"Other": {
+          "Name": "Spark Operator",
+          "Version": "1.0.0",
+          "DownloadUrl": "https://github.com/GoogleCloudPlatform/spark-on-k8s-operator/releases/download/spark-operator-1.0.0/spark-operator-1.0.0.tgz"
+				}
+			},
+			"isOnlyProductionDependency": true,
+			"version": "12.18.3"
+		}
+	],
+	"version": 1
 }
