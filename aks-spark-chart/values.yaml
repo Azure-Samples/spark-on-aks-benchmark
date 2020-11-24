@@ -3,16 +3,34 @@ tcpdsTest:
 loki-stack:
     grafana:
         enabled: true
+        nodeSelector: {
+            agentpool: default
+        }
+        namespaceOverride: monitoring
     prometheus:
         enabled: true
         alertmanager:
             persistentVolume:
                 enabled: false
+            nodeSelector: {
+                agentpool: default
+            }
         server:
             persistentVolume:
                 enabled: false
+            nodeSelector: {
+                agentpool: default
+            }
+        pushgateway:
+            nodeSelector: {
+                agentpool: default
+            }
+
     loki:
         persistence:
             enabled: true
             storageClassName: managed-premium
             size: 5Gi
+        nodeSelector: {
+            agentpool: default
+        }

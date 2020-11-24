@@ -1,0 +1,72 @@
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: spark-nvme
+spec:
+  type: Scala
+  mode: cluster
+  image: sparkacrd8f2.azurecr.io/spark-on-aks:stable
+  imagePullPolicy: Always
+  mainClass: com.microsoftazure.aks.tpcds.TPCDSBenchmark
+  mainApplicationFile: "local:///opt/spark/jars/tpcdsbenmark_2.12-0.1.0-SNAPSHOT.jar"
+  arguments:
+    - "abfss://tpcds@tpcdsdata.dfs.core.windows.net/data"
+    - "abfss://tpcds@tpcdsdata.dfs.core.windows.net/results"
+    - "/opt/tpcds-kit/tools"
+    - "parquet"
+    - "1000"
+    - "1"
+    - "false"
+    # - "q64-v2.4"
+  sparkConf:
+    "spark.eventLog.enabled": "true"
+    "spark.eventLog.dir": "abfss://tpcds@tpcdsdata.dfs.core.windows.net/logs"
+    "spark.speculation": "false"
+    "spark.speculation.multiplier": "3"
+    "spark.speculation.quantile": "0.9"
+    "spark.sql.broadcastTimeout": "7200"
+    "spark.sql.crossJoin.enabled": "true"
+    "spark.sql.parquet.mergeSchema": "false"
+    "spark.sql.parquet.filterPushdown": "true"
+    "spark.kubernetes.node.selector.agentpool": "nvme"
+    "spark.sql.cbo.enabled": "true"
+    "spark.sql.cbo.joinReorder.enabled": "true"
+    "spark.serializer": "org.apache.spark.serializer.KryoSerializer"
+    "spark.sql.shuffle.partitions" : "225"
+    "spark.shuffle.compress": "true"
+    "spark.shuffle.spill.compress": "true"
+    "spark.broadcast.compress": "true"
+  timeToLiveSeconds: 3600
+  sparkVersion: "3.0.0"
+  restartPolicy:
+    type: Never
+  volumes:
+    - name: "spark-local-dir-1"
+      hostPath:
+        path: "/pv-disks/nvme"
+  driver:
+    envSecretKeyRefs:
+      TCPDSDATA_KEY:
+        name: tcpdsdata-key
+        key: key
+    cores: 4
+    memory: "16000m"
+    labels:
+      version: 3.0.0
+    serviceAccount: spark
+    volumeMounts:
+      - mountPath: "/tmp/dir1"
+        name: "spark-local-dir-1"
+        mountPropagation: "HostToContainer"
+    terminationGracePeriodSeconds: 60
+  executor:
+    cores: 2
+    instances: 10
+    memory: "8000m"
+    memoryOverhead: "2G"
+    labels:
+      version: 3.0.0
+    volumeMounts:
+      - mountPath: "/tmp/dir1"
+        name: "spark-local-dir-1"
+        mountPropagation: "HostToContainer"

@@ -19,8 +19,6 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-This is to benchmark Apache Spark performance on Azure Kubernetes Service (AKS).
-
 ## Build Status
 
 | Status                                                                            |
@@ -31,10 +29,15 @@ This is to benchmark Apache Spark performance on Azure Kubernetes Service (AKS).
 
 | File/folder       | Description                                |
 | ----------------- | ------------------------------------------ |
+| `.github`         | Github specific configuration              |
+| `aks-spark-chart` | Helm Charts                                |
+| `benchmark`       | Benchmark test code                        |
+| `docs`            | Project documentation                      |
 | `env`             | Terraform to build environment             |
-| `kuberentes`      | Kubernetes manifests                       |
 | `spark`           | Spark Docker containers and config         |
+| `spark_dev`       |                                            |
 | `.gitignore`      | Define what to ignore at commit time.      |
+| `CODE_OF_CONDUCT.md` | Code of Conduct for this project        |
 | `CHANGELOG.md`    | List of changes to the sample.             |
 | `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
 | `README.md`       | This README file.                          |
@@ -81,7 +84,7 @@ Benchmark test was executed on 2 different types of Node sizes.
 
 ### Spark parameters
 
-The following sparkConfig was used for this benchmark.  
+The following sparkConfig was used for this benchmark.
 
 | sparkConfig        | Value |
 |--------------------|-------|
@@ -108,7 +111,7 @@ In total, 10 iterations of the query have been executed and median execution tim
 
 - Execution time(in seconds) of q82, q70 with Ephemeral vs Premium OS disk
 
-![q64 results](./results/q82-q70-result.PNG)
+![q64 results](q82-q70-result.PNG)
 
 ## Contributing
 
