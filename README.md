@@ -102,13 +102,13 @@ Additional parameters are documented in [this](benchmark/spark-benchmark-test.ya
 
 In total, 10 iterations of the query have been executed and median execution time was recorded.
 
-- Execution time(in seconds) of q64 with Ephemeral vs Premium OS disk
+- Execution time (in seconds) of q64 with Ephemeral, Premium and NVMe disk on D and L series VMs
 
-![q64 results](q64-result.PNG)
+![q64 results](./results/q64-result.PNG)
 
 - Execution time(in seconds) of q82, q70 with Ephemeral vs Premium OS disk
 
-![q64 results](q82-q70-result.PNG)
+![q64 results](./results/q82-q70-result.PNG)
 
 ## Contributing
 

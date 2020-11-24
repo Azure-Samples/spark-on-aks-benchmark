@@ -1,0 +1,13 @@
+{"Registrations":[ 
+    {
+      "component": { 
+       "type": "git", 
+       "git": { 
+         "repositoryUrl": "https://github.com/databricks/spark-sql-perf", 
+         "commitHash": "d85f75bb38a11b10562d2fed7e3ee8e78ee2f97d" 
+         }
+       }
+    }
+ ],
+ "Version": 1
+}
