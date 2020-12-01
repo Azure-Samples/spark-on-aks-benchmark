@@ -30,19 +30,20 @@ Taxonomies for products and languages: https://review.docs.microsoft.com/new-hop
 | File/folder       | Description                                |
 | ----------------- | ------------------------------------------ |
 | `.github`         | Github specific configuration              |
+| `.gitignore`      | Define what to ignore at commit time.      |
 | `aks-spark-chart` | Helm Charts                                |
 | `benchmark`       | Benchmark test code                        |
 | `docs`            | Project documentation                      |
 | `env`             | Terraform to build environment             |
+| `results`         | Benchmark results images                   |
 | `spark`           | Spark Docker containers and config         |
-| `spark_dev`       |                                            |
-| `.gitignore`      | Define what to ignore at commit time.      |
 | `CODE_OF_CONDUCT.md` | Code of Conduct for this project        |
-| `CHANGELOG.md`    | List of changes to the sample.             |
 | `CONTRIBUTING.md` | Guidelines for contributing to the sample. |
-| `README.md`       | This README file.                          |
+| `CHANGELOG.md`    | List of changes to the sample.             |
 | `LICENSE`         | The license for the sample.                |
-
+| `README.md`       | This README file.                          |
+| `SECURITY.md`     | This SECURITY file.                        |
+| `SUPPORT.md`      | The SUPPORT policy for this project file.                         |
 ## Prerequisites
 
 This project requires the user to have access to the following:
@@ -66,9 +67,7 @@ This project also requires a development environment with the following tools in
 
 TPC-DS, a third-party committee that provides industry standard benchmark tools for measuring performance of decision support solutions. You can access the various tools on their [website](http://www.tpc.org/tpcds/default5.asp).
 
-In this benchmark, we evaluated and measured the performance of Spark SQL using the TPC-DS benchmark on Azure Kubernetes (AKS). Our tests was limited to q64-v2.4, q70-v2.4, q82-v2.4
-These queries were executed with the wrapper written by Databricks https://github.com/npoggi/spark-sql-perf/tree/spark-3_update
-
+This project implements a derivative of TPC-DS benchmark wrapped within [Databricks](https://github.com/npoggi/spark-sql-perf/tree/spark-3_update) sql perf libraries. In this derivative benchmark, we evaluated and measured the performance of Spark SQL on Azure Kubernetes (AKS). Our tests was limited to q64-v2.4, q70-v2.4, q82-v2.4 queries.
 ## Running the sample
 
 The required steps to run the performance benchmark is documented [here](./benchmark/README.md)
@@ -126,3 +125,7 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+## Credits
+
+

@@ -23,17 +23,9 @@ make OS=LINUX
 ````
 
 Make sure tpcds-kit/tools folder is copied to /opt/tpcds-kit/tools on the Docker image.
-
 ## Build Docker image
 
-The Docker file for preparing is the image is located [Here](../spark/Dockerfile).
-=======
-TODO: 
-
-## Build Docker image
-
-The Docker file for preparing is the image is located [Here](../spark/Dockerfile). We have used Spark 3.0.0
-
+The Docker file for preparing is the image is located [Here](../spark/Dockerfile). This project uses Spark 3.0.0
 ## Run benchmark
 
   - Generate the 1 TB data
@@ -49,10 +41,11 @@ The Docker file for preparing is the image is located [Here](../spark/Dockerfile
 | file type                                   | parquet                 |
 | data size                                   | 1000 for 1 TB           |
 
-  - Run TPC-DS queries
+- Run TPC-DS queries
     ```
     kubectl apply -f benchmark/spark-benchmark-test.yaml
     ```
+
 | argument                                    | value                   |
 |---------------------------------------------|-------------------------|
 | folder location to generate data            | ADLS Gen2 data location |
