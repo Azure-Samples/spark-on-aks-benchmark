@@ -129,4 +129,4 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Credits
 
-Many thanks to @juan-lee and @alexeldeib for reviewing the AKS and NVMe setup.
+Many thanks to [@juan-lee](https://github.com/juan-lee) and [@alexeldeib](https://github.com/alexeldeib) for reviewing the AKS and NVMe setup.
