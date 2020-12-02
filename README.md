@@ -80,6 +80,7 @@ Benchmark test was executed on 2 different types of Node sizes.
 |------------------|------------|--------------|--------------|
 | [Standard_DS13_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series-memory) | 5          | 256          | [Ephemeral](https://docs.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks)    |
 | [Standard_DS13_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series-memory) | 5          | 256          | [Premium](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-types#:~:text=Azure%20premium%20SSDs%20deliver%20high-performance%20and%20low-latency%20disk,Premium%20SSDs%20are%20suitable%20for%20mission-critical%20production%20applications.)      |
+| [Standard_L8s_v2](https://docs.microsoft.com/en-us/azure/virtual-machines/lsv2-series?toc=/azure/virtual-machines/linux/toc.json&bc=/azure/virtual-machines/linux/breadcrumb/toc.json) | 5          | 256   | [NVMe](https://docs.microsoft.com/en-us/azure/virtual-machines/lsv2-series?toc=/azure/virtual-machines/linux/toc.json&bc=/azure/virtual-machines/linux/breadcrumb/toc.json) |        
 
 ### Spark parameters
 
@@ -110,7 +111,7 @@ In total, 10 iterations of the query have been executed and median execution tim
 
 - Execution time(in seconds) of q82, q70 with Ephemeral vs Premium OS disk
 
-![q64 results](q82-q70-result.PNG)
+![q64 results](./results/q82-q70-result.PNG)
 
 ## Contributing
 
@@ -128,4 +129,4 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Credits
 
-
+Many thanks to @juan-lee and @alexeldeib for reviewing the AKS and NVMe setup.
