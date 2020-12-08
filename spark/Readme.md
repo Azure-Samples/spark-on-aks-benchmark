@@ -25,7 +25,7 @@ Dockerfile is to create a container for spark TPCDS. This container will install
 
 Dockerfile copies tpcds_jars to /opt/spark/jars in the container.
 
-# Build databricks spark sql perf library
+# Build databricks Spark Sql perf library
 
 Follow the steps given in GitHub for the Spark Sql library to create a jar file, and move the jar file under tpcds_jars
 
