@@ -26,7 +26,7 @@ RUN set -ex && \
     apt-get update && \
     ln -s /lib /lib64 && \
     apt-get upgrade -y && \
-    apt-get install -q -y bash tini libc6 libpam-modules krb5-user libnss3 curl && \
+    apt-get install -q -y bash tini libc6 libpam-modules krb5-user libnss3 curl gcc make flex bison byacc git && \
     rm /bin/sh && \
     ln -sv /bin/bash /bin/sh && \
     echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
@@ -34,6 +34,7 @@ RUN set -ex && \
     rm -rf /var/cache/apt/*
 
 #gcc make flex bison byacc git
+#sudo apt-get install gcc make flex bison byacc git
 
 # Download and install haddop
 RUN mkdir -p /opt && \
@@ -61,13 +62,17 @@ RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure-datalake/
 # Download and install OpenSSL library
 RUN curl https://repo1.maven.org/maven2/org/wildfly/openssl/wildfly-openssl/${OPENSSL_VERSION}.Final/wildfly-openssl-${OPENSSL_VERSION}.Final.jar -o /opt/spark/jars/wildfly-openssl-${OPENSSL_VERSION}.Final.jar
 
+#Build a Sql Perf Library
+RUN git clone https://github.com/databricks/spark-sql-perf && \
+    cd spark-sql-perf && \
+    sbt package
 
 ADD tpcds_jars /opt/spark/jars
 
 # add TPCDS code
-#RUN git clone https://github.com/databricks/tpcds-kit.git && \
-#    cd tpcds-kit/tools && \
-#    make OS=LINUX
+RUN git clone https://github.com/databricks/tpcds-kit.git && \
+    cd tpcds-kit/tools && \
+    make OS=LINUX
 
 ADD tpcds-kit /opt/tpcds-kit
 
