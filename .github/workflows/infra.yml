@@ -1,7 +1,7 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT license.
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT license
 
-name: "Production"
+name: Infra
 
 on:
   push:
@@ -19,7 +19,7 @@ on:
     - '!**/*.md'
 jobs:
   terraform:
-    name: "Terraform"
+    name: Terraform
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -33,7 +33,6 @@ jobs:
       CLIENT_ID: ${{ secrets.CLIENT_ID }}
       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       TENANT_ID: ${{ secrets.TENANT_ID }}
-      PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
 
     # Checkout the repository to the GitHub Actions runner
     steps:
@@ -55,7 +54,7 @@ jobs:
       # Generates an execution plan for Terraform
       - name: Terraform Plan
         id: plan
-        run: terraform plan -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" -var="public_key=$PUBLIC_KEY"
+        run: terraform plan -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" 
         working-directory: ./env/base-cluster
         continue-on-error: true
 
@@ -64,7 +63,7 @@ jobs:
         id: apply
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
-          terraform apply -auto-approve -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID" -var="public_key=$PUBLIC_KEY"
+          terraform apply -auto-approve -var="sub=$SUB" -var="client_id=$CLIENT_ID" -var="client_secret=$CLIENT_SECRET" -var="tenant_id=$TENANT_ID"
         working-directory: ./env/base-cluster
 
       - name: Terraform Output
