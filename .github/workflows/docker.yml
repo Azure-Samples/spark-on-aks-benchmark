@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-name: "Production"
+name: Docker
 
 on:
   push:
@@ -19,7 +19,6 @@ on:
     - '!**/*.md'
 jobs:
   docker:
-    needs: terraform
     runs-on: ubuntu-latest
     name: "Docker"
 
