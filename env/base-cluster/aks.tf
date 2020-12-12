@@ -55,7 +55,7 @@ resource "azurerm_role_assignment" "acr" {
 
   depends_on = [
     azurerm_container_registry.acr,
-
+    module.aks_subnet
   ]
 }
 
@@ -66,5 +66,6 @@ resource "azurerm_role_assignment" "cd_push" {
 
   depends_on = [
     azurerm_container_registry.acr,
+    module.aks_subnet
   ]
 }
