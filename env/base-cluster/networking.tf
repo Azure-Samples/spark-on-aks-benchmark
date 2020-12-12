@@ -24,36 +24,6 @@ module "aks_subnet" {
 
 }
 
-module "vm_subnet" {
-  source = "../modules/subnet"
-
-  name                 = "vms"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = module.vnet.name
-  address_prefixes     = ["10.10.8.0/24"]
-
-  service_endpoints = ["Microsoft.ContainerRegistry"]
-}
-
-module "bastion_subnet" {
-  source = "../modules/subnet"
-
-  name                 = "AzureBastionSubnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = module.vnet.name
-  address_prefixes     = ["10.10.9.224/27"]
-
-  service_endpoints = ["Microsoft.ContainerRegistry"]
-}
-
-resource "azurerm_public_ip" "bastion" {
-  name                = "bastion_pip"
-  location            = local.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
-
 resource "azurerm_role_assignment" "aks_sp_network" {
   scope                = module.vnet.id
   role_definition_name = "Network Contributor"
