@@ -2,6 +2,32 @@
 # Licensed under the MIT license.
 
 # Base Image
+FROM openjdk:8-jre-slim as builder
+
+# Update environment & install dev tools
+RUN apt update -y && apt upgrade -y && \
+    apt install curl gcc make flex bison byacc git gnupg2 -y
+
+# Install sbt
+RUN echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list && \
+  curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add && \
+  apt-get update -y && \
+  apt-get install sbt -y
+
+# add TPCDS code
+RUN git clone https://github.com/databricks/tpcds-kit.git && \
+    cd tpcds-kit/tools && \
+    make clean && \
+    make OS=LINUX
+
+#Build a Sql Perf Library
+RUN git clone https://github.com/databricks/spark-sql-perf && \
+    cd spark-sql-perf && \
+    sbt package
+
+
+
+# Base Image
 FROM openjdk:8-jre-slim
 
 # Define Spark and Hadoop Verson
@@ -12,11 +38,9 @@ ENV OPENSSL_VERSION 1.1.0
 ENV SPARK_HOME=/opt/spark
 ENV PATH=$PATH:$SPARK_HOME/bin
 
-
+# Set path
 ENV HADOOP_HOME=/opt/hadoop
 ENV PATH=$PATH:$HADOOP_HOME/bin
-
-
 ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native
 ENV HADOOP_OPTIONAL_TOOLS="hadoop-azure,hadoop-azure-datalake"
 
@@ -26,15 +50,12 @@ RUN set -ex && \
     apt-get update && \
     ln -s /lib /lib64 && \
     apt-get upgrade -y && \
-    apt-get install -q -y bash tini libc6 libpam-modules krb5-user libnss3 curl gcc make flex bison byacc git && \
+    apt-get install -q -y bash tini curl && \
     rm /bin/sh && \
     ln -sv /bin/bash /bin/sh && \
     echo "auth required pam_wheel.so use_uid" >> /etc/pam.d/su && \
     chgrp root /etc/passwd && chmod ug+rw /etc/passwd && \
     rm -rf /var/cache/apt/*
-
-#gcc make flex bison byacc git
-#sudo apt-get install gcc make flex bison byacc git
 
 # Download and install haddop
 RUN mkdir -p /opt && \
@@ -62,26 +83,11 @@ RUN curl https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure-datalake/
 # Download and install OpenSSL library
 RUN curl https://repo1.maven.org/maven2/org/wildfly/openssl/wildfly-openssl/${OPENSSL_VERSION}.Final/wildfly-openssl-${OPENSSL_VERSION}.Final.jar -o /opt/spark/jars/wildfly-openssl-${OPENSSL_VERSION}.Final.jar
 
-#Build a Sql Perf Library
-RUN git clone https://github.com/databricks/spark-sql-perf && \
-    cd spark-sql-perf && \
-    sbt package
-
-ADD tpcds_jars /opt/spark/jars
-
-# add TPCDS code
-RUN git clone https://github.com/databricks/tpcds-kit.git && \
-    cd tpcds-kit/tools && \
-    make OS=LINUX
-
-ADD tpcds-kit /opt/tpcds-kit
-
-#Spark work directory
+# copy libraries from builder
+COPY --from=builder /tpcds-kit/tools /opt/tpcds-kit/tools
+COPY --from=builder /spark-sql-perf/target/scala-2.12/spark-sql-perf_*.jar /opt/spark/jars
 
 RUN mkdir /opt/spark/work-dir
-
-RUN chmod +x /opt/tpcds-kit/tools/checksum /opt/tpcds-kit/tools/dsdgen /opt/tpcds-kit/tools/dsqgen /opt/tpcds-kit/tools/mkheader && \
-    chmod +x /opt/tpcds-kit/tools/distcomp
 
 # add scripts and update spark default config
 ADD spark-defaults.conf /opt/spark/conf/spark-defaults.conf
