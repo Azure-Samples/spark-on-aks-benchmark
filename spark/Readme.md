@@ -1,7 +1,6 @@
-<!-- TODO: Add instructions on building Dockerfile -->
 # Spark Image
 
-Instructions to prepare the Spark container image. Docker file includes all the steps required to build the image. 
+Instructions to prepare the Spark container image.
 
 ## Contents
 
@@ -9,12 +8,11 @@ Instructions to prepare the Spark container image. Docker file includes all the 
 | ----------------- | ---------------------------------------------|
 | `Dockerfile`      | Dockerfile to build environment              |
 
-
 ## Spark Dockerfile 
 
 Dockerfile to create the Spark container image with required tools to run the benchmark.
 
-The Spark image requires
+The Spark container contains
 
 - TPC-DS toolkit
 - Databricks SQL perf library
@@ -24,7 +22,6 @@ The Spark image requires
 ## Build Databricks Spark SQL perf library
 
 - Clone the Databricks Spark SQL perf library
-
 ````
 git clone https://github.com/databricks/spark-sql-perf && \ 
 cd spark-sql-perf && \

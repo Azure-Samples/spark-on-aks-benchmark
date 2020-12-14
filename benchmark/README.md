@@ -8,26 +8,8 @@ You can also build your own image by downloading the Apache Spark distribution l
 
 Follow the steps listed [here](https://docs.microsoft.com/en-us/azure/storage/blobs/create-data-lake-storage-account) to configure the ADLS Gen2 storage account.
 
-## Build benchmark utility
 
-Download the TPC-DS kit from [tpc.org](http://www.tpc.org/tpcds/)
-
-### Linux Setup
-
-Install the required development tools on Ubuntu
-
-````
-sudo apt-get install gcc make flex bison byacc git
-cd tpcds-kit/tools
-make OS=LINUX
-````
-
-Make sure tpcds-kit/tools folder is copied to /opt/tpcds-kit/tools on the Docker image.
-## Build Docker image
-
-The Docker file for preparing is the image is located [Here](../spark/Dockerfile). This project uses Spark 3.0.0
 ## Run benchmark
-
   - Generate the 1 TB data
     ```
     kubectl apply -f benchmark/spark-benchmark-generate-data.yaml
@@ -55,9 +37,9 @@ The Docker file for preparing is the image is located [Here](../spark/Dockerfile
 
 ## Execution results
 
-You can capture extract the query executive time using the pod logs or the output folder location
+You can capture the query execution time using the pod logs or the output folder location.
 
-  - Use Azure Storage Explorer [download here](https://azure.microsoft.com/en-us/features/storage-explorer/)  to check execution results in ADLS Gen2 storage
+  - Use Azure Storage Explorer [download here](https://azure.microsoft.com/en-us/features/storage-explorer/) to check execution results in ADLS Gen2 storage
   - Checking container logs
     ```
     kubectl logs <driver pod name>
