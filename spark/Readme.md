@@ -1,20 +1,18 @@
 <!-- TODO: Add instructions on building Dockerfile -->
 # Spark Image
 
-Instructions to prepare the Spark container image.
+Instructions to prepare the Spark container image. Docker file includes all the steps required to build the image. 
 
 ## Contents
 
 | File/folder       | Description                                  |
 | ----------------- | ---------------------------------------------|
 | `Dockerfile`      | Dockerfile to build environment              |
-| `tpcds_jar`       | Folder contains jar files to tpcds execution |
-| `tpcds-kit`       | Spark Docker containers and config           |
 
 
 ## Spark Dockerfile 
 
-This Dockerfile is to create the container for Spark with required tools to run the benchmark.
+Dockerfile to create the Spark container image with required tools to run the benchmark.
 
 The Spark image requires
 
@@ -25,33 +23,35 @@ The Spark image requires
 - Hadoop Azure library  
 ## Build Databricks Spark SQL perf library
 
-- Clone the Databricks Spark SQL perf library.
+- Clone the Databricks Spark SQL perf library
 
 ````
-git clone https://github.com/databricks/spark-sql-perf && \ cd spark-sql-perf && \
+git clone https://github.com/databricks/spark-sql-perf && \ 
+cd spark-sql-perf && \
 sbt package 
 ````
 
-- Copy the jar file generated in `/spark-sql-perf/target/scala-x.xx/spark-sql-perf_x.xx-0.x.x-SNAPSHOT.jar` to tpcds_jars
+- Copy the following jar file to /opt/sparks/jars
+````
+/spark-sql-perf/target/scala-x.xx/spark-sql-perf_x.xx-0.x.x-SNAPSHOT.jar 
+````
   
-- Download the TPC-DS toolkit from [www.tpc.org](http://www.tpc.org/tpcds/)
+- Download the TPC-DS toolkit from [www.tpc.org](http://www.tpc.org/tpcds/) and compile for target platform
 
-- Compile the toolkit
+````
+sudo apt-get install gcc make flex bison byacc git
+cd tpcds-kit/tools
+make OS=LINUX
+````
 
-      ````
-      sudo apt-get install gcc make flex bison byacc git
-      cd tpcds-kit/tools
-      make OS=LINUX
-      ````
-
-- Copy the TPC-DS toolkit to tpcds-kit folder on the Spark container image.
+- Copy the tpc-ds/tools to /opt/tpcds-kit/tools
 
 ## Build and publish the Docker image
 
-      ````
-      docker build . -t <acrName>.azurecr.io/<imageName>:<tag> 
+````
+docker build . -t <acrName>.azurecr.io/<imageName>:<tag> 
 
-      docker push <acrName>.azurecr.io/<imageName>:<tag> 
-      ````
+docker push <acrName>.azurecr.io/<imageName>:<tag> 
+````
 
 To run the benchmark follow [these](./../benchmark/README.md) instructions
