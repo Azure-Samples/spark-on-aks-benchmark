@@ -1,14 +1,17 @@
 # Quick Start Guide #
 
 ## Table of Contents ##
+
 - Introduction
 - Prerequisite
 - AKS
 - Spark Operator
 - Generate the TPC-DS Test Data Set
 - Running Benchmarks
+
 ___
 ## Introduction
+
 This repository  is designed to be self contained with all of the resources necessary to deploy Spark on AKS. It leverages a Docker image that will be built and deployed to an Azure Container registry in your subscription. The [Readme file](../spark/Readme.md) contains more information about the Docker manifest. You can make any modifications to to the image here.
 
 If you already have an AKS Cluster where you want to deploy the Spark Operator, skip to the [deployment section](#deploy-spark-operator).
@@ -187,10 +190,5 @@ ___
 
 ___
 ## Running Benchmarks
-Templates used to create testes can be found in the `benchmar/` folder. With the environment configured and the test data set generated, running the following command will run the benchmark test
 
-```bash
-kubectl apply -f benchmark/spark-benchmark-test.yaml
-```
-
-___
+Follow the steps described [here](./../benchmark/README.md) to run the tests 

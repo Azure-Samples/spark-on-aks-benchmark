@@ -44,14 +44,6 @@ This project also requires a development environment with the following tools in
 
 - [Terraform](https://learn.hashicorp.com/terraform/getting-started/install)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-
-## Setup
-
-- [Deploy the Environment](env/Readme.md)
-- [Build and Deploy Dockerfiles](spark/Readme.md)
-- [Apply Kubernetes configuration](kubernetes/Readme.md)
-- [Run benchmark](benchmark/README.md)
-
 ## About TPC-DS Benchmark
 
 TPC-DS, a third-party committee that provides industry standard benchmark tools for measuring performance of decision support solutions. You can access the various tools on their [website](http://www.tpc.org/tpcds/default5.asp).
@@ -59,7 +51,8 @@ TPC-DS, a third-party committee that provides industry standard benchmark tools 
 This project implements a derivative of TPC-DS benchmark wrapped within [Databricks](https://github.com/npoggi/spark-sql-perf/tree/spark-3_update) sql perf libraries. In this derivative benchmark, we evaluated and measured the performance of Spark SQL on Azure Kubernetes (AKS). Our tests was limited to q64-v2.4, q70-v2.4, q82-v2.4 queries.
 ## Running the sample
 
-The required steps to run the performance benchmark is documented [here](./benchmark/README.md)
+Follow the steps described in the [quick start guide](./docs/quick-start-guide.md) to setup and run the benchmark
+## Enviroment setup 
 
 ### Kubernetes Node pools
 
@@ -118,4 +111,6 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Credits
 
-Many thanks to [@juan-lee](https://github.com/juan-lee) and [@alexeldeib](https://github.com/alexeldeib) for reviewing the AKS and NVMe setup.
+- Many thanks to [@juan-lee](https://github.com/juan-lee) and [@alexeldeib](https://github.com/alexeldeib) for reviewing the AKS and NVMe setup.
+
+- Thanks to [@alokjain-01](https://github.com/alokjain-01) for looking into Spark parameters 
