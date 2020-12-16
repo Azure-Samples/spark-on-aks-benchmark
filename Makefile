@@ -1,7 +1,11 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license
 
+<<<<<<< HEAD
 .PHONEY: init plan workspace acr-login aks-login docker-build
+=======
+.PHONEY: init plan workspace
+>>>>>>> e732f05e44cd1503a1b2e76b0c40cb8932e04851
 
 WHOAMI := $(shell whoami)
 WORKSPACE_CHECK := $(shell terraform workspace list | grep $$(whoami) | sed 's/* //')
