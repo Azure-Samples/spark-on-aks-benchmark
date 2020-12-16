@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license
 
-.PHONEY: init plan workspace
+.PHONEY: init plan workspace acr-login aks-login docker-build
 
 WHOAMI := $(shell whoami)
 WORKSPACE_CHECK := $(shell terraform workspace list | grep $$(whoami) | sed 's/* //')
@@ -44,6 +44,8 @@ aks-login:
 	$(AKS_LOGIN)
 
 # Docker Targets
+docker-build:
+	$(shell docker buildx build --platform=linux/amd64 --tag $(ACR_NAME).azurecr.io/spark-on-aks:stable ./spark/)
 
 # Helm Targets
 
