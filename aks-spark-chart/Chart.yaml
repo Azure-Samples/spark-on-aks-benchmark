@@ -28,5 +28,5 @@ dependencies:
       repository: https://grafana.github.io/loki/charts
       alias: loki-stack
     - name: spark-operator
-      version: 1.0.0
+      version: 1.0.5
       repository: http://beyondthecorneroffice.com/spark-on-k8s-operator
