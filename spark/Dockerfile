@@ -25,7 +25,11 @@ RUN git clone https://github.com/databricks/spark-sql-perf && \
     cd spark-sql-perf && \
     sbt package
 
-
+RUN cd / && \
+    git clone https://github.com/Azure-Samples/spark-on-aks-benchmark && \
+    cp /spark-sql-perf/target/scala-2.12/spark-sql-perf_*.jar /spark-on-aks-benchmark/benchmark/lib && \  
+    cd /spark-on-aks-benchmark/benchmark && \
+    sbt package
 
 # Base Image
 FROM openjdk:8-jre-slim
