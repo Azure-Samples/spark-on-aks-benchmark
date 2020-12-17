@@ -5,11 +5,11 @@ ThisBuild / version          := "0.1.0"
 // ThisBuild / organization     := "com.microsoft"
 // ThisBuild / organizationName := "microsoft"
 
-lazy val root = (project in file("."))
-  .settings(
-    name := "tpcdsbenmark",
-    libraryDependencies += scalaTest % Test
-  )
+// lazy val root = (project in file("."))
+//  .settings(
+//    name := "tpcdsbenmark",
+//    libraryDependencies += scalaTest % Test
+//  )
 
 // Uncomment the following for publishing to Sonatype.
 // See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for more detail.
