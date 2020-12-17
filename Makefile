@@ -45,7 +45,7 @@ acr-login:
 docker-build:
 	docker buildx build \
 		--platform=linux/amd64 \
-		--tag $(ACR_NAME).azurecr.io/spark-on-aks:stable ./spark/
+		--tag $(ACR_NAME).azurecr.io/spark-on-aks:stable .
 
 docker-push: docker-build acr-login
 	docker push $(ACR_NAME).azurecr.io/spark-on-aks:stable
@@ -68,11 +68,11 @@ helm-deploy: aks-login
 
 # Testing Targets
 generate-data:
-	sed -i 's/sparkacr4c58/$(ACR_NAME)/' ./benchmark/spark-benchmark-generate-data.yaml
+	sed -i 's/sparkacrc40d/$(ACR_NAME)/' ./benchmark/spark-benchmark-generate-data.yaml
 	kubectl apply -f ./benchmark/spark-benchmark-generate-data.yaml
 
 run-benchmark:
-	sed -i 's/sparkacr4c58/$(ACR_NAME)/' ./benchmark/spark-benchmark-test.yaml
+	sed -i 's/sparkacrc40d/$(ACR_NAME)/' ./benchmark/spark-benchmark-test.yaml
 	kubectl apply -f ./benchmark/spark-benchmark-test.yaml
 
 .PHONEY: all dev init plan apply workspace acr-login docker-build docker-push aks-login helm-deploy new-image new-chart
