@@ -75,5 +75,4 @@ run-benchmark:
 	sed -i 's/sparkacr4c58/$(ACR_NAME)/' ./benchmark/spark-benchmark-test.yaml
 	kubectl apply -f ./benchmark/spark-benchmark-test.yaml
 
-# Prereqs
 .PHONEY: all dev init plan apply workspace acr-login docker-build docker-push aks-login helm-deploy new-image new-chart
