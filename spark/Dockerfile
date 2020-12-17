@@ -25,7 +25,12 @@ RUN git clone https://github.com/databricks/spark-sql-perf && \
     cd spark-sql-perf && \
     sbt package
 
-
+RUN cd / && \
+    git clone https://github.com/Azure-Samples/spark-on-aks-benchmark && \
+    mkdir /spark-on-aks-benchmark/benchmark/lib && \
+    cp /spark-sql-perf/target/scala-2.12/spark-sql-perf_*.jar /spark-on-aks-benchmark/benchmark/lib/ && \
+    cd /spark-on-aks-benchmark/benchmark && \
+    sbt package
 
 # Base Image
 FROM openjdk:8-jre-slim
@@ -85,6 +90,7 @@ RUN curl https://repo1.maven.org/maven2/org/wildfly/openssl/wildfly-openssl/${OP
 
 # copy libraries from builder
 COPY --from=builder /tpcds-kit/tools /opt/tpcds-kit/tools
+COPY --from=builder /spark-on-aks-benchmark/benchmark/target/scala-2.12c/benchmark_2.12-0.1.0.jar /opt/spark/jars
 COPY --from=builder /spark-sql-perf/target/scala-2.12/spark-sql-perf_*.jar /opt/spark/jars
 
 RUN mkdir /opt/spark/work-dir
