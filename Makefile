@@ -67,6 +67,10 @@ helm-deploy: aks-login
 	helm upgrade --install spark ./aks-spark-chart
 
 # Testing Targets
+generate-data:
+	sed -i 's/sparkacr4c58/$(ACR_NAME)/' ./benchmark/spark-benchmark-generate-data.yaml
+	kubectl apply -f ./benchmark/spark-benchmark-generate-data.yaml
+
 run-benchmark:
 	sed -i 's/sparkacr4c58/$(ACR_NAME)/' ./benchmark/spark-benchmark-test.yaml
 	kubectl apply -f ./benchmark/spark-benchmark-test.yaml
