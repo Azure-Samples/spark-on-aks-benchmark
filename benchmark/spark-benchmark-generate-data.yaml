@@ -5,10 +5,10 @@ metadata:
 spec:
   type: Scala
   mode: cluster
-  image: sparkacr4c58.azurecr.io/spark-on-aks:stable
+  image: sparkacrc40d.azurecr.io/spark:prod
   imagePullPolicy: Always
   mainClass: com.microsoft.benchmark.DataGenerator
-  mainApplicationFile: "local:///opt/spark/jars/benchmark_2.12-0.1.0-SNAPSHOT.jar"
+  mainApplicationFile: "local:///opt/spark/jars/benchmark_2.12-0.1.0.jar"
   arguments:
     - "abfss://tpcds@tpcds1tb.dfs.core.windows.net/data"
     - "/opt/tpcds-kit/tools"
