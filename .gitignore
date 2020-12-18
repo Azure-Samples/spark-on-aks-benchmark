@@ -39,3 +39,4 @@ DO-NOT-CHECK-IN
 **/.DS_Store
 **/.terraform.lock.*
 **/backend.hcl*
+**/tfplan*
