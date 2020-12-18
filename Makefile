@@ -21,13 +21,13 @@ new-chart: helm-deploy
 	
 # Terraform Targets
 init: workspace
-	terraform -chdir=env/base-cluster init
+	terraform -chdir=env/base-cluster init -reconfigure -input=false
 
 plan: init
-	terraform -chdir=env/base-cluster plan -var="workspace=$(WHOAMI)"
+	terraform -chdir=env/base-cluster plan -var="workspace=$(WHOAMI)" -out=tfplan -input=false
 
-apply: init
-	terraform -chdir=env/base-cluster apply -auto-approve -var="workspace=$(WHOAMI)"
+apply: init plan
+	terraform -chdir=env/base-cluster apply -auto-approve -var="workspace=$(WHOAMI)" -input=false tfplan
 	az aks update --name $(AKS_NAME) --resource-group $(RG_NAME) --attach-acr $(ACR_NAME)
 
 workspace:
