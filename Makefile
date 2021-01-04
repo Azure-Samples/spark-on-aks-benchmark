@@ -68,11 +68,11 @@ helm-deploy: aks-login
 
 # Testing Targets
 generate-data:
-	sed -i 's/sparkacrc40d/$(ACR_NAME)/' ./benchmark/spark-benchmark-generate-data.yaml
+	sed -i '' -e 's/sparkacrc40d/$(ACR_NAME)/' ./benchmark/spark-benchmark-generate-data.yaml
 	kubectl apply -f ./benchmark/spark-benchmark-generate-data.yaml
 
 run-benchmark:
-	sed -i 's/sparkacrc40d/$(ACR_NAME)/' ./benchmark/spark-benchmark-test.yaml
+	sed -i '' -e 's/sparkacrc40d/$(ACR_NAME)/' ./benchmark/spark-benchmark-test.yaml
 	kubectl apply -f ./benchmark/spark-benchmark-test.yaml
 
 .PHONEY: all dev init plan apply workspace acr-login docker-build docker-push aks-login helm-deploy new-image new-chart
