@@ -75,4 +75,7 @@ run-benchmark:
 	sed -i '' -e 's/sparkacrc40d/$(ACR_NAME)/' ./benchmark/spark-benchmark-test.yaml
 	kubectl apply -f ./benchmark/spark-benchmark-test.yaml
 
-.PHONEY: all dev init plan apply workspace acr-login docker-build docker-push aks-login helm-deploy new-image new-chart
+cleanup:
+	az group delete --name $(RG_NAME)
+
+.PHONEY: all dev init plan apply workspace acr-login docker-build docker-push aks-login helm-deploy new-image new-chart cleanup
