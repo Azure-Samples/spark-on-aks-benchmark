@@ -27,7 +27,7 @@ plan: init
 	terraform -chdir=env/base-cluster plan -var="workspace=$(WHOAMI)" -out=tfplan -input=false
 
 apply: init plan
-	terraform -chdir=env/base-cluster apply -auto-approve -var="workspace=$(WHOAMI)" -input=false tfplan
+	terraform -chdir=env/base-cluster apply -auto-approve -input=false tfplan
 	az aks update --name $(AKS_NAME) --resource-group $(RG_NAME) --attach-acr $(ACR_NAME)
 
 workspace:
@@ -75,7 +75,9 @@ run-benchmark:
 	sed -i '' -e 's/sparkacrc40d/$(ACR_NAME)/' ./benchmark/spark-benchmark-test.yaml
 	kubectl apply -f ./benchmark/spark-benchmark-test.yaml
 
+# Cleanup
 cleanup:
-	az group delete --name $(RG_NAME)
+	az group delete --name $(RG_NAME) --no-wait --yes
 
+# Admin
 .PHONEY: all dev init plan apply workspace acr-login docker-build docker-push aks-login helm-deploy new-image new-chart cleanup
