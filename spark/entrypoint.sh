@@ -72,8 +72,8 @@ case "$1" in
     CMD=(
       "$SPARK_HOME/bin/spark-submit"
       --conf "spark.driver.bindAddress=$SPARK_DRIVER_BIND_ADDRESS"
-      --conf "spark.hadoop.fs.azure.account.auth.type.tpcdsdata.dfs.core.windows.net=SharedKey"
-      --conf "spark.hadoop.fs.azure.account.key.tpcdsdata.dfs.core.windows.net=$TCPDSDATA_KEY"
+      --conf "spark.hadoop.fs.azure.account.auth.type.tpcds1tb.dfs.core.windows.net=SharedKey"
+      --conf "spark.hadoop.fs.azure.account.key.tpcds1tb.dfs.core.windows.net=$TCPDSDATA_KEY"
       --deploy-mode client
       "$@"
     )

@@ -20,12 +20,24 @@
 				"type": "other",
 				"Other": {
           "Name": "Spark Operator",
-          "Version": "1.0.0",
-          "DownloadUrl": "https://github.com/GoogleCloudPlatform/spark-on-k8s-operator/releases/download/spark-operator-1.0.0/spark-operator-1.0.0.tgz"
+          "Version": "1.0.5",
+          "DownloadUrl": "https://github.com/GoogleCloudPlatform/spark-on-k8s-operator/releases/download/spark-operator-1.0.0/spark-operator-1.0.5.tgz"
 				}
 			},
 			"isOnlyProductionDependency": true,
-			"version": "1.0.0"
+			"version": "1.0.5"
+		},
+		{
+			"component": {
+				"type": "other",
+				"Other": {
+          "Name": "Loki Stack",
+          "Version": "2.1.0",
+          "DownloadUrl": "https://github.com/grafana/loki/releases/download/v2.1.0/loki-linux-amd64.zip"
+				}
+			},
+			"isOnlyProductionDependency": true,
+			"version": "2.1.0"
 		}
 	],
 	"version": 1

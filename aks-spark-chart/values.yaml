@@ -6,6 +6,8 @@ spark-operator:
         app: spark
     }
 loki-stack:
+    promtail:
+        enabled: false
     grafana:
         enabled: true
         nodeSelector: {

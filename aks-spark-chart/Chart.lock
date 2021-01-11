@@ -1,9 +1,9 @@
 dependencies:
 - name: loki-stack
-  repository: https://grafana.github.io/loki/charts
-  version: 0.40.1
+  repository: https://grafana.github.io/helm-charts
+  version: 2.1.0
 - name: spark-operator
-  repository: http://beyondthecorneroffice.com/spark-on-k8s-operator
-  version: 1.0.0
-digest: sha256:c852ab326d6142e208f5e4a5d3e48d604c8741d2f80be626ccbfd600090dc80c
-generated: "2020-11-17T08:26:16.399244-08:00"
+  repository: https://googlecloudplatform.github.io/spark-on-k8s-operator
+  version: 1.0.5
+digest: sha256:53e0e0cef965edc64ca6fb7dd6a893a12e4f9607dea3dd8717b26fb5dbb57d15
+generated: "2021-01-04T10:53:49.951585-08:00"
