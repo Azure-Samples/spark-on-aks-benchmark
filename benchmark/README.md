@@ -7,7 +7,7 @@ Follow the steps listed [here](https://docs.microsoft.com/en-us/azure/storage/bl
 
 
 ## Generate data
-  - Generate the 1 TB data
+  - Generate 1 TB data
   ````
   kubectl apply -f benchmark/spark-benchmark-generate-data.yaml
   ````
@@ -21,10 +21,10 @@ Follow the steps listed [here](https://docs.microsoft.com/en-us/azure/storage/bl
 | data size                                   | 1000 for 1 TB           |
 
 ## Run benchmark
+ - Run the benchmark test
   ````
   kubectl apply -f benchmark/spark-benchmark-test.yaml
   ````
-
 | argument                                    | value                   |
 |---------------------------------------------|-------------------------|
 | folder location to generate data            | ADLS Gen2 data location |
