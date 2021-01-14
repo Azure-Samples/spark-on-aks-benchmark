@@ -8,11 +8,8 @@ This repository incorporates material as listed below or described in the code.
 2. Loki Stack (2.1.0)  - https://github.com/grafana/loki/releases/download/v2.1.0/loki-linux-amd64.zip - 2.1.0
 3. Spark Operator (1.0.5)  https://github.com/GoogleCloudPlatform/spark-on-k8s-operator 
 
-
-
-------------------------------------------------------------------------------
-
-databricks/spark-sql-perf d85f75bb38a11b10562d2fed7e3ee8e78ee2f97d - Apache-2.0
+---------------------------------------------------------------------------------------
+1.databricks/spark-sql-perf d85f75bb38a11b10562d2fed7e3ee8e78ee2f97d - Apache-2.0
 
 
 Copyright 2015 Databricks Inc.
