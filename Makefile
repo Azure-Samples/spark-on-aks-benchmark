@@ -4,6 +4,8 @@
 ### SET THESE VARIABLES ###
 SHARED_RG = shared
 TPCDS_DATA = tpcds1tb
+LOCATION = westus2
+TPCDS_STORAGE = sparktpcds
 ###
 
 # Dynamic Variables
@@ -26,7 +28,7 @@ init: workspace
 plan: init
 	terraform -chdir=env/base-cluster plan -var="workspace=$(WHOAMI)" -out=tfplan -input=false
 
-apply: init plan
+apply: plan
 	terraform -chdir=env/base-cluster apply -auto-approve -input=false tfplan
 
 post-apply: apply
