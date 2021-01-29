@@ -85,9 +85,9 @@ Additional parameters are documented in [this](benchmark/spark-benchmark-test.ya
 
 ## Results
 
-**Please note that these are unaudited results and as such are not comparable with any officially published TPC-DS results.
-**
-In total, 10 iterations of the query have been executed and median execution time was recorded. 
+**Please note that these are unaudited results and as such are not comparable with any officially published TPC-DS results.**
+
+In total, 10 iterations of the query have been executed and median execution time was recorded.
 
 - Execution time (in seconds) of q64 with Ephemeral, Premium and NVMe disk on D and L series VMs
 
