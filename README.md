@@ -44,11 +44,11 @@ This project also requires a development environment with the following tools in
 
 - [Terraform](https://learn.hashicorp.com/terraform/getting-started/install)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-## About TPC-DS Benchmark
+## TPC-DS Benchmark toolkit
 
-TPC-DS, a third-party committee that provides industry standard benchmark tools for measuring performance of decision support solutions. You can access the various tools on their [website](http://www.tpc.org/tpcds/default5.asp).
+TPC-DS is an industry-standard benchmark developed by the Transaction Processing Performance Council (TPC). It is used to measure the performance of decision support solutions. The benchmark specification and provided tools may be accessed at [www.tpc.org](www.tpc.org).
 
-This project implements a derivative of TPC-DS benchmark wrapped within [Databricks](https://github.com/npoggi/spark-sql-perf/tree/spark-3_update) sql perf libraries. In this derivative benchmark, we evaluated and measured the performance of Spark SQL on Azure Kubernetes (AKS). Our tests was limited to q64-v2.4, q70-v2.4, q82-v2.4 queries.
+This project implements a derivative of TPC-DS benchmark executed using [Databricks](https://github.com/npoggi/spark-sql-perf/tree/spark-3_update) sql perf libraries. In this derivative benchmark, we evaluated and measured the performance of Spark SQL on Azure Kubernetes (AKS). Our tests was limited to q64-v2.4, q70-v2.4, q82-v2.4 queries.
 ## Running the sample
 
 Follow the steps described in the [quick start guide](./docs/quick-start-guide.md) to setup and run the benchmark
@@ -84,6 +84,8 @@ The following sparkConfig was used for this benchmark.
 Additional parameters are documented in [this](benchmark/spark-benchmark-test.yaml) SparkApplication yaml.
 
 ## Results
+
+**Please note that these are unaudited results and as such are not comparable with any officially published TPC-DS results.**
 
 In total, 10 iterations of the query have been executed and median execution time was recorded.
 
