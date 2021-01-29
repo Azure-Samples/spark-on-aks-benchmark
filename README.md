@@ -46,7 +46,7 @@ This project also requires a development environment with the following tools in
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 ## TPC-DS Benchmark toolkit
 
-TPC-DS, a third-party committee that provides industry standard benchmark tools for measuring performance of decision support solutions. You can access the various tools on their [website](http://www.tpc.org/tpcds/default5.asp).
+TPC-DS is an industry-standard benchmark developed by the Transaction Processing Performance Council (TPC). It is used to measure the performance of decision support solutions. The benchmark specification and provided tools may be accessed at [www.tpc.org](www.tpc.org).
 
 This project implements a derivative of TPC-DS benchmark executed using [Databricks](https://github.com/npoggi/spark-sql-perf/tree/spark-3_update) sql perf libraries. In this derivative benchmark, we evaluated and measured the performance of Spark SQL on Azure Kubernetes (AKS). Our tests was limited to q64-v2.4, q70-v2.4, q82-v2.4 queries.
 ## Running the sample
