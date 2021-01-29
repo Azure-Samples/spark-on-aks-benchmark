@@ -44,7 +44,7 @@ This project also requires a development environment with the following tools in
 
 - [Terraform](https://learn.hashicorp.com/terraform/getting-started/install)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-## About TPC-DS Benchmark
+## TPC-DS Benchmark toolkit
 
 TPC-DS, a third-party committee that provides industry standard benchmark tools for measuring performance of decision support solutions. You can access the various tools on their [website](http://www.tpc.org/tpcds/default5.asp).
 
@@ -85,7 +85,9 @@ Additional parameters are documented in [this](benchmark/spark-benchmark-test.ya
 
 ## Results
 
-In total, 10 iterations of the query have been executed and median execution time was recorded. Please note that these are unaudited results and as such are not comparable with any officially published TPC-DS results.
+**Please note that these are unaudited results and as such are not comparable with any officially published TPC-DS results.
+**
+In total, 10 iterations of the query have been executed and median execution time was recorded. 
 
 - Execution time (in seconds) of q64 with Ephemeral, Premium and NVMe disk on D and L series VMs
 
