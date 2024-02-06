@@ -146,9 +146,9 @@ jobs:
       - name: Set Variable
         id: vars
         run: |
-          echo ::set-output name=AKS::$(cat drop/aks_name.txt)
-          echo ::set-output name=AKS_RG::$(cat drop/rg_name.txt)
-          echo ::set-output name=ACR::$(cat drop/acr_name.txt)
+          echo AKS=$(cat drop/aks_name.txt) >> "$GITHUB_OUTPUT"
+          echo AKS_RG=$(cat drop/rg_name.txt) >> "$GITHUB_OUTPUT"
+          echo ACR=$(cat drop/acr_name.txt) >> "$GITHUB_OUTPUT"
 
 
       # Set the target AKS cluster.
